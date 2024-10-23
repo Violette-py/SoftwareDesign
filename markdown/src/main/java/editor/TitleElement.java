@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TitleElement extends MarkdownElement {
-//    private MarkdownElement root;
+    //    private MarkdownElement root;
     private List<MarkdownElement> children;
 
     public TitleElement() {
@@ -20,7 +20,12 @@ public class TitleElement extends MarkdownElement {
     }
 
 //    @Override
-//    public static void insert(MarkdownElement markdownElement) {
+//    public void insert(MarkdownElement markdownElement) {
+//
+//    }
+
+//    @Override
+//    public static void insertTitle(TitleElement titleElement) {
 //
 //    }
 
@@ -29,11 +34,20 @@ public class TitleElement extends MarkdownElement {
 
     }
 
+    public List<MarkdownElement> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<MarkdownElement> children) {
+        this.children = children;
+    }
+
     @Override
     public MarkdownElement getChild(int i) {
         return null;
     }
 
+    // 是否需要 override，还是单独只让标题有这个函数？
     @Override
     public void display() {
 

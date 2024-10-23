@@ -15,6 +15,8 @@ public abstract class MarkdownElement {
         this.content = content;
     }
 
+//    public abstract void insert(MarkdownElement markdownElement);
+
     public abstract void remove(MarkdownElement markdownElement);
 
     public abstract MarkdownElement getChild(int i);

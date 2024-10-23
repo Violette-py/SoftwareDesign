@@ -1,5 +1,7 @@
 package editor;
 
+import receiver.Document;
+
 public class TextElement extends MarkdownElement {
     public TextElement(int lineNumber, String content) {
         super(lineNumber, content);
@@ -9,6 +11,12 @@ public class TextElement extends MarkdownElement {
 //    public void insert(MarkdownElement markdownElement) {
 //        throw new UnsupportedOperationException("Cannot insert to a leaf");
 //    }
+
+    public static void insertText(TextElement textElement) {
+
+        TitleElement root = Document.getRoot();
+
+    }
 
     @Override
     public void remove(MarkdownElement markdownElement) {
