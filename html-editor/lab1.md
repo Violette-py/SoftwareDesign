@@ -12,7 +12,7 @@ HTML 是一种标记语言，用于创建网页。HTML 由一系列标签组成�
     <title>My Webpage</title>
   </head>
   <body>
-    <h1 id="title">Welcome to my webpage</h1>
+    <h1 id="page-title">Welcome to my webpage</h1>
     <p id="description">This is a paragraph.</p>
     <ul id="list">
       <li id="item1">Item 1</li>
@@ -51,7 +51,7 @@ HTML 是一种标记语言，用于创建网页。HTML 由一系列标签组成�
 
 2. 元素内部可以包含文本内容，但文本必须处在该元素的其他子元素之前（参见上述例子中的`<div id="footer">`）。
 3. 属性只支持 id，除`<html>`, `<head>`,` <title>` ,` <body>`外其他元素必须拥有 id 属性，若这四个标签没有提供 id，默认 id 为标签名。同时 id 应该具有唯一性。
-4. HTML的解析有一定的工作量，但这部分并不是我们考核的重点。建议查找使用现有的HTML解析器，比如Jsoup(Java)等。
+4. HTML 的解析有一定的工作量，但这部分并不是我们考核的重点。建议查找使用现有的 HTML 解析器，比如 Jsoup(Java)等。
 
 ### 2. 编辑功能
 
@@ -72,7 +72,7 @@ HTML 是一种标记语言，用于创建网页。HTML 由一系列标签组成�
    │   └── title
    │       └── My Webpage
    └── body
-       ├── h1#title
+       ├── h1#page-title
        │   └── Welcome to my webpage
        ├── p#description
        │   └── This is a paragraph.
@@ -99,7 +99,7 @@ HTML 是一种标记语言，用于创建网页。HTML 由一系列标签组成�
        <title>My Webpage</title>
      </head>
      <body>
-       <h1 id="title">Welcome to my webpage</h1>
+       <h1 id="page-title">Welcome to my webpage</h1>
        <p id="description">This is a paragraph.</p>
        <ul id="list">
          <li id="item1">Item 1</li>
@@ -115,7 +115,7 @@ HTML 是一种标记语言，用于创建网页。HTML 由一系列标签组成�
    </html>
    ```
 
-    **注意**，Lab2的部分会要求显示一个其它对象的数据结构，比如当前工作目录的文件夹的树形结构。需要考虑树形结构构造代码的灵活性。
+   **注意**，Lab2 的部分会要求显示一个其它对象的数据结构，比如当前工作目录的文件夹的树形结构。需要考虑树形结构构造代码的灵活性。
 
 3. 能够将编辑器中的 HTML 模型以 HTML 字符串的形式写入文件保存。
    - 需要确保编辑器之后能够再次读取该文件并继续编辑。
