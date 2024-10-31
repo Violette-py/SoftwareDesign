@@ -24,7 +24,7 @@ public class InsertCommand implements Command {
     public InsertCommand(HtmlDocument document, String tagName, String idValue, String insertLocation, String textContent) throws NotExistsException, RepeatedException {
         this.document = document;
         // 寻找插入位置
-        Pair<TagElement, TagElement> result = DocumentUtil.findElementAndItsParent(document, insertLocation);
+        Pair<TagElement, TagElement> result = DocumentUtil.findElementAndItsParentById(document, insertLocation);
         this.targetElement = result.first();
         this.parentElement = result.second();
         if (this.targetElement == null || this.parentElement == null) {
@@ -45,7 +45,7 @@ public class InsertCommand implements Command {
     public void execute() {
         // 在 targetElement 之前插入
         int index = parentElement.getChildren().indexOf(targetElement);
-        parentElement.getChildren().add(index, newElement);
+        parentElement.addChild(index, newElement);
     }
 
     @Override

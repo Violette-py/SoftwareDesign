@@ -34,6 +34,10 @@ public class TagElement extends HtmlElement {
         this.children.add(element);
     }
 
+    public void addChild(int index,HtmlElement element) {
+        this.children.add(index, element);
+    }
+
     public void removeChild(HtmlElement element) {
         this.children.remove(element);
     }
