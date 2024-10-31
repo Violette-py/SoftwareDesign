@@ -54,6 +54,8 @@ public class HtmlEditor {
         Command command = null;
         String[] params;
 
+        // TODO: parts[1]可能会访问越界
+
         switch (commandType) {
             case "insert":
                 params = parts[1].split(" ", 4);
@@ -93,11 +95,9 @@ public class HtmlEditor {
                     throw new NotExistsException("command", line);
                 }
                 break;
-//            case "delete":
-//                if (parts.length == 2) {
-//                    command = new DeleteCommand(document, parts[1]);
-//                }
-//                break;
+            case "delete":
+                    command = new DeleteCommand(document, parts[1]);
+                break;
             case "print-indent":
                 command = new PrintIndentCommand(document, parts.length > 1 ? Integer.parseInt(parts[1]) : 2); // 默认缩进2空格
                 break;
