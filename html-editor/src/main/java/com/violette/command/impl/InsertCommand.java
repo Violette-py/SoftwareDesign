@@ -20,11 +20,9 @@ public class InsertCommand implements Command {
     private TagElement newElement;
     private TagElement targetElement;   // 参考元素，即新元素将插入到该元素之前
     private TagElement parentElement; // 参考元素的直接父节点，用于插入新元素
-    private String textContent;
 
     public InsertCommand(HtmlDocument document, String tagName, String idValue, String insertLocation, String textContent) throws NotExistsException, RepeatedException {
         this.document = document;
-        this.textContent = textContent;
         // 寻找插入位置
         Pair<TagElement, TagElement> result = DocumentUtil.findTargetElementAndItsParent(document, insertLocation);
         this.targetElement = result.first();
@@ -37,15 +35,17 @@ public class InsertCommand implements Command {
             throw new RepeatedException("id", idValue);
         }
         this.newElement = new TagElement(tagName, idValue);
+        // 插入文本内容
+        if (textContent != null && !textContent.isEmpty()) {  // FIXME: 空格是否要作为文本内容
+            this.newElement.addChild(new TextElement(textContent)); // 添加文本内容作为子元素
+        }
     }
 
     @Override
     public void execute() {
+        // 在 targetElement 之前插入
         int index = parentElement.getChildren().indexOf(targetElement);
-        parentElement.getChildren().add(index, newElement); // 在 refElement 之前插入
-        if (textContent != null && !textContent.isEmpty()) {  // FIXME: 空格是否要作为文本内容
-            newElement.addChild(new TextElement(textContent)); // 添加文本内容作为子元素
-        }
+        parentElement.getChildren().add(index, newElement);
     }
 
     @Override
@@ -55,7 +55,8 @@ public class InsertCommand implements Command {
 
     @Override
     public void redo() {
+        // 在 targetElement 之前插入
         int index = parentElement.getChildren().indexOf(targetElement);
-        parentElement.getChildren().add(index, newElement); // 在 refElement 之前插入
+        parentElement.getChildren().add(index, newElement);
     }
 }

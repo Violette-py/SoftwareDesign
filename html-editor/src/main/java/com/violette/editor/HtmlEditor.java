@@ -58,12 +58,13 @@ public class HtmlEditor {
 
         switch (commandType) {
             case "insert":
-                parts = parts[1].split(" ", 4);
-                if (parts.length == 3) {
-                    command = new InsertCommand(document, parts[0], parts[1], parts[2], "");
-                } else if (parts.length == 4) {
-                    command = new InsertCommand(document, parts[0], parts[1], parts[2], parts[3]);
+                String[] params = parts[1].split(" ", 4);
+                if (params.length == 3) {
+                    command = new InsertCommand(document, params[0], params[1], params[2], "");
+                } else if (params.length == 4) {
+                    command = new InsertCommand(document, params[0], params[1], params[2], params[3]);
                 } else {
+                    throw new NotExistsException("command", line);
                 }
                 break;
 //            case "append":
