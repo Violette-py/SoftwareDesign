@@ -2,8 +2,10 @@ package com.violette.editor;
 
 import com.violette.command.Command;
 import com.violette.command.CommandExecutor;
+import com.violette.command.impl.InitCommand;
 import com.violette.command.impl.InsertCommand;
 import com.violette.command.impl.PrintIndentCommand;
+import com.violette.exception.NotExistsException;
 import com.violette.exception.RepeatedException;
 
 import java.util.Scanner;
@@ -114,12 +116,13 @@ public class HtmlEditor {
 //                    command = new SaveCommand(parts[1]);
 //                }
 //                break;
-//            case "init":
-//                command = new InitCommand(document);
-//                break;
-            default:
-                System.out.println("Unknown command: " + line);
+            case "init":
+                command = new InitCommand(document);
                 break;
+            default:
+//                System.out.println("Unknown command: " + line);
+//                break;
+                throw new NotExistsException("command", commandType);
         }
 
         return command;

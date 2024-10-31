@@ -14,6 +14,9 @@ public class HtmlDocument extends TagElement {
 
     public HtmlDocument() {
         super("html");
+    }
+
+    public void init() {
         this.head = new TagElement("head");
         this.head.addChild(new TagElement("title"));
         this.body = new TagElement("body");
@@ -25,7 +28,7 @@ public class HtmlDocument extends TagElement {
     public void printTree(TagElement parentElement, String prefix) {
         System.out.println("html");
         for (int i = 0; i < this.getChildren().size(); i++) {
-            this.getChildren().get(i).printTree(this,"");
+            this.getChildren().get(i).printTree(this, "");
         }
     }
 }
