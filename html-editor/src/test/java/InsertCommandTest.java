@@ -21,6 +21,8 @@ public class InsertCommandTest {
     // 不能用BeforeEach，这是junit5的写法
     public void setUp() {
         this.document = new HtmlDocument();
+        this.document.init();
+
         // 向 body 添加一些元素用于测试
         TagElement div = new TagElement("div", "div1");
         this.document.getBody().addChild(div);

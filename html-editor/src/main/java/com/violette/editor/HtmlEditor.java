@@ -5,6 +5,7 @@ import com.violette.command.CommandExecutor;
 import com.violette.command.impl.InitCommand;
 import com.violette.command.impl.InsertCommand;
 import com.violette.command.impl.PrintIndentCommand;
+import com.violette.command.impl.PrintTreeCommand;
 import com.violette.exception.NotExistsException;
 import com.violette.exception.RepeatedException;
 
@@ -94,9 +95,9 @@ public class HtmlEditor {
             case "print-indent":
                 command = new PrintIndentCommand(document, parts.length > 1 ? Integer.parseInt(parts[1]) : 2); // 默认缩进2空格
                 break;
-//            case "print-tree":
-//                command = new PrintTreeCommand(document);
-//                break;
+            case "print-tree":
+                command = new PrintTreeCommand(document);
+                break;
 //            case "spell-check":
 //                command = new SpellCheckCommand(document);
 //                break;
