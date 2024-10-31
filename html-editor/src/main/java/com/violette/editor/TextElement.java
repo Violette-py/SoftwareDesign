@@ -8,7 +8,7 @@ import lombok.Data;
  * @description 组合模式的leaf，纯文本元素，不包含子元素
  */
 @Data
-public class TextElement implements HtmlElement{
+public class TextElement extends HtmlElement{
     private String text;
 
     public TextElement(String text) {
@@ -22,7 +22,8 @@ public class TextElement implements HtmlElement{
     }
 
     @Override
-    public void printTree() {
-
+    public void printTree(String prefix) {
+        // 打印文本内容
+        System.out.println(prefix + "└── " + text);
     }
 }

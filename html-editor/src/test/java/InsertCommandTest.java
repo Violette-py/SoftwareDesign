@@ -23,9 +23,9 @@ public class InsertCommandTest {
         this.document = new HtmlDocument();
         // 向 body 添加一些元素用于测试
         TagElement div = new TagElement("div", "div1");
-        this.document.getBody().add(div);
+        this.document.getBody().addChild(div);
         TagElement p = new TagElement("p", "p1");
-        div.add(p);
+        div.addChild(p);
         /*
           html
             ├── head
@@ -73,7 +73,7 @@ public class InsertCommandTest {
     @Test
     public void testIdUniqueness() {
         TagElement existingElement = new TagElement("span", "existingSpan");
-        document.getBody().add(existingElement);
+        document.getBody().addChild(existingElement);
         assertThrows(RepeatedException.class, () -> {
             new InsertCommand(document, "span", "existingSpan", "p1", "");
         });

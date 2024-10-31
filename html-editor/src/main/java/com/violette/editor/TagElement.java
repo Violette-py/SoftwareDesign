@@ -11,9 +11,10 @@ import java.util.List;
  * @description 组合模式的Composite对象，复合节点可以包含子节点，可以是叶子节点
  */
 @Data
-public class TagElement implements HtmlElement {
+public class TagElement extends HtmlElement {
     private String tagName;
     private String id;
+    private TagElement parentElement;
     private List<HtmlElement> children = new ArrayList<>();
 
     public TagElement() {
@@ -30,11 +31,11 @@ public class TagElement implements HtmlElement {
         this.id = id;
     }
 
-    public void add(HtmlElement element) {
+    public void addChild(HtmlElement element) {
         this.children.add(element);
     }
 
-    public void remove(HtmlElement element) {
+    public void removeChild(HtmlElement element) {
         this.children.remove(element);
     }
 
@@ -48,7 +49,13 @@ public class TagElement implements HtmlElement {
     }
 
     @Override
-    public void printTree() {
-
+    public void printTree(String prefix) {
+        // 打印当前元素的标签和id
+        System.out.println(prefix + tagName + (id != null ? "#" + id : ""));
+        if (!children.isEmpty()) {
+            for (HtmlElement child : children) {
+                child.printTree(prefix + "├── ");
+            }
+        }
     }
 }

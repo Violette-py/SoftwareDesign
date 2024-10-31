@@ -15,9 +15,9 @@ public class HtmlDocument extends TagElement {
     public HtmlDocument() {
         super("html");
         this.head = new TagElement("head");
-        this.head.add(new TagElement("title"));
+        this.head.addChild(new TagElement("title"));
         this.body = new TagElement("body");
-        this.add(head);
-        this.add(body);
+        this.addChild(head);
+        this.addChild(body);
     }
 }

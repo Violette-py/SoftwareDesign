@@ -23,23 +23,6 @@ public class InsertCommand implements Command {
     private TagElement parentElement; // 参考元素的直接父节点，用于插入新元素
     private String textContent;
 
-//    public InsertCommand(HtmlDocument document, String tagName, String idValue, String insertLocation) throws NotExistsException, RepeatedException{
-//        this.document = document;
-//        this.textContent = ""; // 默认为空，稍后可能会设置
-//        // 寻找插入位置
-//        Pair<TagElement, TagElement> result = findElementAndParent(document, insertLocation);
-//        this.refElement = result.first;
-//        this.parentElement = result.second;
-//        if (this.refElement == null || this.parentElement == null) {
-//            throw new NotExistsException("id", insertLocation);
-//        }
-//        // 确保id唯一
-//        if (isIdExists(document, idValue)) {
-//            throw new RepeatedException("id", idValue);
-//        }
-//        this.newElement = new TagElement(tagName, idValue);
-//    }
-
     public InsertCommand(HtmlDocument document, String tagName, String idValue, String insertLocation, String textContent) throws NotExistsException, RepeatedException{
         this.document = document;
         this.textContent = textContent;
@@ -62,7 +45,7 @@ public class InsertCommand implements Command {
         int index = parentElement.getChildren().indexOf(refElement);
         parentElement.getChildren().add(index, newElement); // 在 refElement 之前插入
         if (textContent != null && !textContent.isEmpty()) {  // FIXME: 空格是否要作为文本内容
-            newElement.add(new TextElement(textContent)); // 添加文本内容作为子元素
+            newElement.addChild(new TextElement(textContent)); // 添加文本内容作为子元素
         }
     }
 
