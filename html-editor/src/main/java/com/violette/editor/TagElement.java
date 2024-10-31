@@ -14,7 +14,6 @@ import java.util.List;
 public class TagElement extends HtmlElement {
     private String tagName;
     private String id;
-    private TagElement parentElement;
     private List<HtmlElement> children = new ArrayList<>();
 
     public TagElement() {
@@ -49,13 +48,18 @@ public class TagElement extends HtmlElement {
     }
 
     @Override
-    public void printTree(String prefix) {
-        // 打印当前元素的标签和id
-        System.out.println(prefix + tagName + (id != null ? "#" + id : ""));
-        if (!children.isEmpty()) {
-            for (HtmlElement child : children) {
-                child.printTree(prefix + "├── ");
-            }
+    public void printTree(TagElement parentElement, String prefix) { // 父元素一定是TagElement类型
+        boolean isLast = isLastChild(parentElement);
+        String currContent = prefix;
+        currContent += isLast ? "└── " : "├── ";
+        currContent += tagName;
+        currContent += this.defaultElement.contains(tagName) ? "" : "#" + id;
+        System.out.println(currContent);
+//        System.out.println(prefix + connector + tagName + "#" + id);
+
+        for (HtmlElement child : children) {
+            String childPrefix = isLast ? prefix + "    " : prefix + "│   ";
+            child.printTree(this, childPrefix);
         }
     }
 }

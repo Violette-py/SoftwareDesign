@@ -22,8 +22,7 @@ public class TextElement extends HtmlElement{
     }
 
     @Override
-    public void printTree(String prefix) {
-        // 打印文本内容
+    public void printTree(TagElement parentElement, String prefix) {
         System.out.println(prefix + "└── " + text);
     }
 }

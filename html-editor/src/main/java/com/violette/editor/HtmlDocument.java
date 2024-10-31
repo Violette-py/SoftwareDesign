@@ -20,4 +20,12 @@ public class HtmlDocument extends TagElement {
         this.addChild(head);
         this.addChild(body);
     }
+
+    @Override
+    public void printTree(TagElement parentElement, String prefix) {
+        System.out.println("html");
+        for (int i = 0; i < this.getChildren().size(); i++) {
+            this.getChildren().get(i).printTree(this,"");
+        }
+    }
 }
