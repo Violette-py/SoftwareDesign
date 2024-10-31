@@ -37,16 +37,6 @@ public class SpellCheckCommand implements Command {
         traverseAndCheckText(document);
     }
 
-    @Override
-    public void undo() {
-        // 显示类命令不需要撤销
-    }
-
-    @Override
-    public void redo() {
-        // 显示类命令不需要重做
-    }
-
     // TODO: 检查标记文本，HTML，而不仅仅检查文字；同时希望检查单词拼写
 
     /**
@@ -87,5 +77,25 @@ public class SpellCheckCommand implements Command {
             System.out.println("Suggested correction(s): " +
                     match.getSuggestedReplacements());
         }
+    }
+
+    @Override
+    public void undo() {
+        // 显示类命令不需要撤销
+    }
+
+    @Override
+    public void redo() {
+        // 显示类命令不需要重做
+    }
+
+    @Override
+    public boolean isDisplayCommand() {
+        return true;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return false;
     }
 }

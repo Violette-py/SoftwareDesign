@@ -1,37 +1,37 @@
 package com.violette.command.impl;
 
 import com.violette.command.Command;
-import com.violette.editor.HtmlDocument;
+import com.violette.command.CommandExecutor;
 
 /**
  * @author Violette
- * @date 2024/10/31 11:10
+ * @date 2024/11/1 0:05
  */
-public class PrintTreeCommand implements Command {
-    private HtmlDocument document;
+public class RedoCommand implements Command {
+    private CommandExecutor commandExecutor;
 
-    public PrintTreeCommand(HtmlDocument document) {
-        this.document = document;
+    public RedoCommand(CommandExecutor commandExecutor) {
+        this.commandExecutor = commandExecutor;
     }
 
     @Override
     public void execute() {
-        document.printTree(null, "");
+        commandExecutor.redo();
     }
 
     @Override
     public void undo() {
-        // 显示类命令不需要撤销
+        // Redo操作本身不需要撤销
     }
 
     @Override
     public void redo() {
-        // 显示类命令不需要重做
+        // Redo操作本身不需要重做
     }
 
     @Override
     public boolean isDisplayCommand() {
-        return true;
+        return false;
     }
 
     @Override

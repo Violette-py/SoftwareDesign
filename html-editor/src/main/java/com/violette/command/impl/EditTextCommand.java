@@ -74,4 +74,14 @@ public class EditTextCommand implements Command {
         // 重做操作：执行相同的编辑操作
         execute();
     }
+
+    @Override
+    public boolean isDisplayCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return false;
+    }
 }

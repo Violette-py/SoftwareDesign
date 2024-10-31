@@ -13,12 +13,15 @@ public class CommandExecutor {
 
     public void executeCommand(Command command) {
         command.execute();
-        history.push(command);
-        redoStack.clear();  // why
+        // 跳过显示类命令，执行IO命令后不可撤销及重做
+        if (!command.isDisplayCommand() && !command.isIOCommand()) {
+            history.push(command);
+            redoStack.clear();
+        }
     }
 
     public void undo() { // ctrl+Z,撤销命令
-        if (!history.isEmpty()) {
+        if (!history.isEmpty() && !history.peek().isDisplayCommand() && !history.peek().isIOCommand()) {
             Command command = history.pop();
             command.undo();
             redoStack.push(command);
@@ -26,7 +29,7 @@ public class CommandExecutor {
     }
 
     public void redo() { // ctrl+Y,恢复命令
-        if (!redoStack.isEmpty()) {
+        if (!redoStack.isEmpty() && !redoStack.peek().isDisplayCommand() && !redoStack.peek().isIOCommand()) {
             Command command = redoStack.pop();
             command.redo();
             history.push(command);

@@ -66,4 +66,14 @@ public class DeleteCommand implements Command {
         // 重做删除操作：再次从父元素中移除元素
         this.parentElement.removeChild(this.elementToDelete);
     }
+
+    @Override
+    public boolean isDisplayCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return false;
+    }
 }

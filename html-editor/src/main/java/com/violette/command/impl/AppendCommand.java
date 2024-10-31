@@ -58,4 +58,14 @@ public class AppendCommand implements Command {
         parentElement.addChild(newElement); // 重新添加新元素
     }
 
+    @Override
+    public boolean isDisplayCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return false;
+    }
+
 }

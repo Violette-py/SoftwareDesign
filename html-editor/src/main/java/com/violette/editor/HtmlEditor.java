@@ -125,12 +125,20 @@ public class HtmlEditor {
                     throw new NotExistsException("command", line);
                 }
                 break;
-//            case "undo":
-//                command = new UndoCommand(commandExecutor);
-//                break;
-//            case "redo":
-//                command = new RedoCommand(commandExecutor);
-//                break;
+            case "undo":
+                if (parts.length == 1) {
+                    command = new UndoCommand(commandExecutor);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
+                break;
+            case "redo":
+                if (parts.length == 1) {
+                    command = new RedoCommand(commandExecutor);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
+                break;
             case "read":
                 if (parts.length == 2) {
                     command = new ReadCommand(document, parts[1]);

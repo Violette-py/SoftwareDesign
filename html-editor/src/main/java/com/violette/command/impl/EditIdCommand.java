@@ -66,4 +66,14 @@ public class EditIdCommand implements Command {
         // 重做更改，再次将ID更改为新值
         element.setId(newId);
     }
+
+    @Override
+    public boolean isDisplayCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return false;
+    }
 }

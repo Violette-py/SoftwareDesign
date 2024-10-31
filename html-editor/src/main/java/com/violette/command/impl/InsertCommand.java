@@ -59,4 +59,14 @@ public class InsertCommand implements Command {
         int index = parentElement.getChildren().indexOf(targetElement);
         parentElement.getChildren().add(index, newElement);
     }
+
+    @Override
+    public boolean isDisplayCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return false;
+    }
 }

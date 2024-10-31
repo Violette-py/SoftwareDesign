@@ -73,4 +73,14 @@ public class SaveCommand implements Command {
     public void redo() {
         // 执行输入/输出指令后，不允许撤销与重做
     }
+
+    @Override
+    public boolean isDisplayCommand() {
+        return false;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return true;
+    }
 }

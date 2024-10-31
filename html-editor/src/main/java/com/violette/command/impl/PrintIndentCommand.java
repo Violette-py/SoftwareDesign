@@ -30,4 +30,14 @@ public class PrintIndentCommand implements Command {
     public void redo() {
         // 显示类命令不需要重做
     }
+
+    @Override
+    public boolean isDisplayCommand() {
+        return true;
+    }
+
+    @Override
+    public boolean isIOCommand() {
+        return false;
+    }
 }
