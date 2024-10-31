@@ -31,4 +31,15 @@ public class HtmlDocument extends TagElement {
             this.getChildren().get(i).printTree(this, "");
         }
     }
+
+    public void printTree() {
+        System.out.println("html");
+        for (int i = 0; i < this.getChildren().size(); i++) {
+            this.getChildren().get(i).printTree(this, "");
+        }
+    }
+
+//    public void printTree() {
+//        printTree(this, "");
+//    }
 }

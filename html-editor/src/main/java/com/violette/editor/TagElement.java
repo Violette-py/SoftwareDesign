@@ -55,7 +55,6 @@ public class TagElement extends HtmlElement {
         currContent += tagName;
         currContent += this.defaultElement.contains(tagName) ? "" : "#" + id;
         System.out.println(currContent);
-//        System.out.println(prefix + connector + tagName + "#" + id);
 
         for (HtmlElement child : children) {
             String childPrefix = isLast ? prefix + "    " : prefix + "│   ";

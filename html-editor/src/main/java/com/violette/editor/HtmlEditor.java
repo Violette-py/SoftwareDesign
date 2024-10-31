@@ -2,10 +2,7 @@ package com.violette.editor;
 
 import com.violette.command.Command;
 import com.violette.command.CommandExecutor;
-import com.violette.command.impl.InitCommand;
-import com.violette.command.impl.InsertCommand;
-import com.violette.command.impl.PrintIndentCommand;
-import com.violette.command.impl.PrintTreeCommand;
+import com.violette.command.impl.*;
 import com.violette.exception.NotExistsException;
 import com.violette.exception.RepeatedException;
 
@@ -55,10 +52,11 @@ public class HtmlEditor {
 
         String commandType = parts[0].toLowerCase();
         Command command = null;
+        String[] params;
 
         switch (commandType) {
             case "insert":
-                String[] params = parts[1].split(" ", 4);
+                params = parts[1].split(" ", 4);
                 if (params.length == 3) {
                     command = new InsertCommand(document, params[0], params[1], params[2], "");
                 } else if (params.length == 4) {
@@ -67,14 +65,16 @@ public class HtmlEditor {
                     throw new NotExistsException("command", line);
                 }
                 break;
-//            case "append":
-//                if (parts.length >= 4) {
-//                    command = new AppendCommand(document, parts[1], parts[2], parts[3]);
-//                    if (parts.length == 5) {
-//                        ((AppendCommand) command).setTextContent(parts[4]);
-//                    }
-//                }
-//                break;
+            case "append":
+                params = parts[1].split(" ", 4);
+                if (params.length == 3) {
+                    command = new AppendCommand(document, params[0], params[1], params[2], "");
+                } else if (params.length == 4) {
+                    command = new AppendCommand(document, params[0], params[1], params[2], params[3]);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
+                break;
 //            case "edit-id":
 //                if (parts.length == 3) {
 //                    command = new EditIdCommand(document, parts[1], parts[2]);
