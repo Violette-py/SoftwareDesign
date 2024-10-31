@@ -1,6 +1,5 @@
 package com.violette;
 
-import com.violette.editor.HtmlDocument;
 import com.violette.editor.HtmlEditor;
 
 public class Main {

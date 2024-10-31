@@ -25,6 +25,8 @@ public class HtmlEditor {
         Scanner scanner = new Scanner(System.in);
         System.out.println("This is a HTML editor, code whatever you want here.");
 
+        // TODO: 编辑器必须先进行 read 或 init 命令，才可以使用其他命令
+
         while (true) {
             System.out.println("Enter command:");
             // 读取用户输入
@@ -104,9 +106,9 @@ public class HtmlEditor {
             case "print-tree":
                 command = new PrintTreeCommand(document);
                 break;
-//            case "spell-check":
-//                command = new SpellCheckCommand(document);
-//                break;
+            case "spell-check":
+                command = new SpellCheckCommand(document);
+                break;
 //            case "undo":
 //                command = new UndoCommand(commandExecutor);
 //                break;

@@ -14,13 +14,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -39,6 +39,20 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.14.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- spell check -->
+        <dependency>
+            <groupId>org.languagetool</groupId>
+            <artifactId>language-en</artifactId>  <!-- language-all -->
+            <version>6.5</version>
+        </dependency>
+
 
     </dependencies>
 
