@@ -8,7 +8,7 @@ import lombok.Data;
  * @description 组合模式的leaf，纯文本元素，不包含子元素
  */
 @Data
-public class TextElement extends HtmlElement{
+public class TextElement extends HtmlElement {
     private String text;
 
     public TextElement(String text) {
@@ -23,6 +23,7 @@ public class TextElement extends HtmlElement{
 
     @Override
     public void printTree(TagElement parentElement, String prefix) {
-        System.out.println(prefix + "└── " + text);
+        String connector = isLastChild(parentElement) ? "└── " : "├── ";
+        System.out.println(prefix + connector + text);
     }
 }

@@ -75,19 +75,24 @@ public class HtmlEditor {
                     throw new NotExistsException("command", line);
                 }
                 break;
-//            case "edit-id":
-//                if (parts.length == 3) {
-//                    command = new EditIdCommand(document, parts[1], parts[2]);
-//                }
-//                break;
-//            case "edit-text":
-//                if (parts.length >= 3) {
-//                    command = new EditTextCommand(document, parts[1], parts[2]);
-//                    if (parts.length > 3) {
-//                        ((EditTextCommand) command).setTextContent(parts[3]);
-//                    }
-//                }
-//                break;
+            case "edit-id":
+                params = parts[1].split(" ", 2);
+                if (parts.length == 2) {
+                    command = new EditIdCommand(document, params[0], params[1]);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
+                break;
+            case "edit-text":
+                params = parts[1].split(" ", 2);
+                if (params.length == 1) {
+                    command = new EditTextCommand(document, params[0], "");
+                } else if (params.length == 2) {
+                    command = new EditTextCommand(document, params[0], params[1]);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
+                break;
 //            case "delete":
 //                if (parts.length == 2) {
 //                    command = new DeleteCommand(document, parts[1]);
