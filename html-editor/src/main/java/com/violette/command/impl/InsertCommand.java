@@ -23,7 +23,7 @@ public class InsertCommand implements Command {
     private TagElement parentElement; // 参考元素的直接父节点，用于插入新元素
     private String textContent;
 
-    public InsertCommand(HtmlDocument document, String tagName, String idValue, String insertLocation, String textContent) throws NotExistsException, RepeatedException{
+    public InsertCommand(HtmlDocument document, String tagName, String idValue, String insertLocation, String textContent) throws NotExistsException, RepeatedException {
         this.document = document;
         this.textContent = textContent;
         // 寻找插入位置

@@ -1,3 +1,4 @@
+import com.violette.command.Command;
 import com.violette.command.impl.PrintTreeCommand;
 import com.violette.editor.HtmlDocument;
 import com.violette.editor.TagElement;
@@ -14,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class PrintTreeCommandTest {
     private HtmlDocument document;
-    private PrintTreeCommand command;
 
     @Before
     public void setUp() {
         this.document = new HtmlDocument();
-        this.command = new PrintTreeCommand(document);
+        this.document.init();
+
         // 向 body 添加一些元素用于测试
         TagElement p1 = new TagElement("p", "p1");
         TextElement text = new TextElement("Hello World");
@@ -28,7 +29,6 @@ public class PrintTreeCommandTest {
         TagElement div = new TagElement("div", "div1");
         div.addChild(p1);
         div.addChild(p2);
-
         document.getBody().addChild(div);
 
         TagElement span = new TagElement("span", "span1");
@@ -55,6 +55,8 @@ public class PrintTreeCommandTest {
      * */
     @Test
     public void testPrintTree() {
+        Command printTreeCommand = new PrintTreeCommand(document);
+
         StringBuilder expectedOutput = new StringBuilder();
         expectedOutput.append("html\n");
         expectedOutput.append("├── head\n");
@@ -69,7 +71,7 @@ public class PrintTreeCommandTest {
 
         // 捕获标准输出
         CapturingPrintStream capture = CapturingPrintStream.capture();
-        command.execute();
+        printTreeCommand.execute();
         CapturingPrintStream.release();
 
         // 验证输出是否符合预期
