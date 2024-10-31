@@ -26,14 +26,14 @@ public class HtmlDocument extends TagElement {
 
     @Override
     public void printTree(TagElement parentElement, String prefix) {
-        System.out.println("html");
+        System.out.println(this.getTagName());
         for (int i = 0; i < this.getChildren().size(); i++) {
             this.getChildren().get(i).printTree(this, "");
         }
     }
 
     public void printTree() {
-        System.out.println("html");
+        System.out.println(this.getTagName());
         for (int i = 0; i < this.getChildren().size(); i++) {
             this.getChildren().get(i).printTree(this, "");
         }

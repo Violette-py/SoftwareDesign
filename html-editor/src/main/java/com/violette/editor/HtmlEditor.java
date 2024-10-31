@@ -98,7 +98,7 @@ public class HtmlEditor {
                 }
                 break;
             case "delete":
-                    command = new DeleteCommand(document, parts[1]);
+                command = new DeleteCommand(document, parts[1]);
                 break;
             case "print-indent":
                 command = new PrintIndentCommand(document, parts.length > 1 ? Integer.parseInt(parts[1]) : 2); // 默认缩进2空格
@@ -115,11 +115,9 @@ public class HtmlEditor {
 //            case "redo":
 //                command = new RedoCommand(commandExecutor);
 //                break;
-//            case "read":
-//                if (parts.length == 2) {
-//                    command = new ReadCommand(parts[1]);
-//                }
-//                break;
+            case "read":
+                command = new ReadCommand(document, parts[1]);
+                break;
 //            case "save":
 //                if (parts.length == 2) {
 //                    command = new SaveCommand(parts[1]);

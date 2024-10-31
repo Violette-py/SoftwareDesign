@@ -47,6 +47,8 @@ public class SpellCheckCommand implements Command {
         // 显示类命令不需要重做
     }
 
+    // TODO: 检查标记文本，HTML，而不仅仅检查文字；同时希望检查单词拼写
+
     /**
      * 遍历HTML文档并检查所有文本元素的拼写。
      *
