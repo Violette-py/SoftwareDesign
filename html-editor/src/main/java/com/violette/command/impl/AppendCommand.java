@@ -7,7 +7,6 @@ import com.violette.editor.TextElement;
 import com.violette.exception.NotExistsException;
 import com.violette.exception.RepeatedException;
 import com.violette.utils.DocumentUtil;
-import com.violette.utils.Pair;
 
 /**
  * @author Violette
@@ -28,8 +27,7 @@ public class AppendCommand implements Command {
     public AppendCommand(HtmlDocument document, String tagName, String idValue, String parentElementId, String textContent) throws NotExistsException, RepeatedException {
         this.document = document;
         // 寻找目标元素，即为新元素的父元素
-        Pair<TagElement, TagElement> result = DocumentUtil.findTargetElementAndItsParent(document, parentElementId);
-        this.parentElement = result.first();
+        this.parentElement = DocumentUtil.findElementById(document, parentElementId);
         if (this.parentElement == null) {
             throw new NotExistsException("id", parentElementId);
         }
