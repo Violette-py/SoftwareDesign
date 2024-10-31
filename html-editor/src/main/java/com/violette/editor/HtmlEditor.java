@@ -46,7 +46,7 @@ public class HtmlEditor {
     }
 
     private Command parseCommand(String line) throws Exception {
-        // FIXME: 先提取第一个，根据命令决定后续分割数量
+        // 先提取第一个，根据具体命令决定后续分割数量
         String[] parts = line.split(" ", 2);
         if (parts.length == 0) {
             return null; // 或者抛出一个异常
@@ -55,8 +55,6 @@ public class HtmlEditor {
         String commandType = parts[0].toLowerCase();
         Command command = null;
         String[] params;
-
-        // TODO: parts[1]可能会访问越界
 
         switch (commandType) {
             case "insert":
@@ -98,16 +96,34 @@ public class HtmlEditor {
                 }
                 break;
             case "delete":
-                command = new DeleteCommand(document, parts[1]);
+                if (parts.length == 2) {
+                    command = new DeleteCommand(document, parts[1]);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
                 break;
             case "print-indent":
-                command = new PrintIndentCommand(document, parts.length > 1 ? Integer.parseInt(parts[1]) : 2); // 默认缩进2空格
+                if (parts.length == 1) {
+                    command = new PrintIndentCommand(document, 2); // 默认缩进2空格
+                } else if (parts.length == 2) {
+                    command = new PrintIndentCommand(document, Integer.parseInt(parts[1]));
+                } else {
+                    throw new NotExistsException("command", line);
+                }
                 break;
             case "print-tree":
-                command = new PrintTreeCommand(document);
+                if (parts.length == 1) {
+                    command = new PrintTreeCommand(document);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
                 break;
             case "spell-check":
-                command = new SpellCheckCommand(document);
+                if (parts.length == 1) {
+                    command = new SpellCheckCommand(document);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
                 break;
 //            case "undo":
 //                command = new UndoCommand(commandExecutor);
@@ -116,15 +132,25 @@ public class HtmlEditor {
 //                command = new RedoCommand(commandExecutor);
 //                break;
             case "read":
-                command = new ReadCommand(document, parts[1]);
+                if (parts.length == 2) {
+                    command = new ReadCommand(document, parts[1]);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
                 break;
-//            case "save":
-//                if (parts.length == 2) {
-//                    command = new SaveCommand(parts[1]);
-//                }
-//                break;
+            case "save":
+                if (parts.length == 2) {
+                    command = new SaveCommand(document, parts[1]);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
+                break;
             case "init":
-                command = new InitCommand(document);
+                if (parts.length == 1) {
+                    command = new InitCommand(document);
+                } else {
+                    throw new NotExistsException("command", line);
+                }
                 break;
             default:
 //                System.out.println("Unknown command: " + line);
