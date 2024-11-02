@@ -31,13 +31,16 @@ public class SpellCheckCommand implements Command {
         this.langTool = new JLanguageTool(Languages.getLanguageForShortCode("en"));
     }
 
+    protected JLanguageTool getLangTool() {
+        // 便于在测试代码中模拟外部依赖
+        return this.langTool;
+    }
+
     @Override
     public void execute() {
         // 遍历HTML文档中的所有文本元素
         traverseAndCheckText(document);
     }
-
-    // TODO: 检查标记文本，HTML，而不仅仅检查文字；同时希望检查单词拼写
 
     /**
      * 遍历HTML文档并检查所有文本元素的拼写。
@@ -47,7 +50,7 @@ public class SpellCheckCommand implements Command {
     private void traverseAndCheckText(HtmlElement element) {
         if (element instanceof TextElement) {
             // 检查TextElement的文本内容
-            System.out.println("now checking:" + ((TextElement) element).getText());
+            System.out.println("now checking: " + ((TextElement) element).getText());
             checkText(((TextElement) element).getText());
         } else if (element instanceof TagElement) {
             // 递归遍历TagElement的子元素
@@ -65,7 +68,7 @@ public class SpellCheckCommand implements Command {
     private void checkText(String text) {
         List<RuleMatch> matches = null;
         try {
-            matches = langTool.check(text);
+            matches = getLangTool().check(text);  // 便于在测试代码中模拟外部依赖
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
