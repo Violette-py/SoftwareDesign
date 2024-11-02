@@ -16,7 +16,7 @@ import java.util.List;
  * @author Violette
  * @date 2024/10/31 19:04
  */
-public class SpellCheckCommand implements Command {
+public class SpellCheckCommand extends Command {
     private HtmlDocument document;
     private JLanguageTool langTool;
 
@@ -26,6 +26,8 @@ public class SpellCheckCommand implements Command {
      * @param document HTML文档。
      */
     public SpellCheckCommand(HtmlDocument document) {
+        super(CommandType.DISPLAY);
+
         this.document = document;
         // 使用LanguageTool支持的语言代码初始化LanguageTool对象，例如"en-US"表示美式英语
         this.langTool = new JLanguageTool(Languages.getLanguageForShortCode("en"));
@@ -90,15 +92,5 @@ public class SpellCheckCommand implements Command {
     @Override
     public void redo() {
         // 显示类命令不需要重做
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return true;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
     }
 }

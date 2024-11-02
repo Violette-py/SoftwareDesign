@@ -19,12 +19,14 @@ import com.violette.utils.DocumentUtil;
  * @Param parentElement 目标父元素的 id，新元素将被插入到该元素内部，并且成为该元素的最后一个子元素
  * @Param textContent 可选参数，表示新元素中的文本内容
  */
-public class AppendCommand implements Command {
+public class AppendCommand extends Command {
     private HtmlDocument document;
     private TagElement newElement;
     private TagElement parentElement; // 目标父元素
 
     public AppendCommand(HtmlDocument document, String tagName, String idValue, String parentElementId, String textContent) throws NotExistsException, RepeatedException {
+        super(CommandType.EDIT);
+
         this.document = document;
         // 寻找目标元素，即为新元素的父元素
         this.parentElement = DocumentUtil.findElementById(document, parentElementId);
@@ -57,15 +59,4 @@ public class AppendCommand implements Command {
     public void redo() {
         parentElement.addChild(newElement); // 重新添加新元素
     }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
-    }
-
 }

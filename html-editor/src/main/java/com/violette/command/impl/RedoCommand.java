@@ -7,10 +7,12 @@ import com.violette.command.CommandExecutor;
  * @author Violette
  * @date 2024/11/1 0:05
  */
-public class RedoCommand implements Command {
+public class RedoCommand extends Command {
     private CommandExecutor commandExecutor;
 
     public RedoCommand(CommandExecutor commandExecutor) {
+        super(CommandType.UNDO_REDO);
+
         this.commandExecutor = commandExecutor;
     }
 
@@ -27,15 +29,5 @@ public class RedoCommand implements Command {
     @Override
     public void redo() {
         // Redo操作本身不需要重做
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
     }
 }

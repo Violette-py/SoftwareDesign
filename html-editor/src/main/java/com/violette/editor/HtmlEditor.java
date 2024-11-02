@@ -4,9 +4,9 @@ import com.violette.command.Command;
 import com.violette.command.CommandExecutor;
 import com.violette.command.impl.*;
 import com.violette.exception.NotExistsException;
-import com.violette.exception.RepeatedException;
 
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * @author Violette
@@ -24,8 +24,7 @@ public class HtmlEditor {
     public void start() throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("This is a HTML editor, code whatever you want here.");
-
-        // TODO: 编辑器必须先进行 read 或 init 命令，才可以使用其他命令
+        boolean isFirstCommand = true;
 
         while (true) {
             System.out.println("Enter command:");
@@ -36,6 +35,11 @@ public class HtmlEditor {
             }
             // 解析命令
             Command parsedCommand = parseCommand(line);
+            if (isFirstCommand && !(parsedCommand instanceof ReadCommand) && !(parsedCommand instanceof InitCommand)) {
+                throw new RuntimeException("First Command must be [read] or [init]");
+            }
+            isFirstCommand = false;
+
             // 委托给 executor执行 -- 为了实现 undo和 redo功能
             if (parsedCommand != null) {
                 commandExecutor.executeCommand(parsedCommand);
@@ -57,7 +61,7 @@ public class HtmlEditor {
         String[] params;
 
         switch (commandType) {
-            case "insert":
+            case "insert" -> {
                 params = parts[1].split(" ", 4);
                 if (params.length == 3) {
                     command = new InsertCommand(document, params[0], params[1], params[2], "");
@@ -66,8 +70,8 @@ public class HtmlEditor {
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "append":
+            }
+            case "append" -> {
                 params = parts[1].split(" ", 4);
                 if (params.length == 3) {
                     command = new AppendCommand(document, params[0], params[1], params[2], "");
@@ -76,16 +80,16 @@ public class HtmlEditor {
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "edit-id":
+            }
+            case "edit-id" -> {
                 params = parts[1].split(" ", 2);
                 if (parts.length == 2) {
                     command = new EditIdCommand(document, params[0], params[1]);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "edit-text":
+            }
+            case "edit-text" -> {
                 params = parts[1].split(" ", 2);
                 if (params.length == 1) {
                     command = new EditTextCommand(document, params[0], "");
@@ -94,15 +98,15 @@ public class HtmlEditor {
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "delete":
+            }
+            case "delete" -> {
                 if (parts.length == 2) {
                     command = new DeleteCommand(document, parts[1]);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "print-indent":
+            }
+            case "print-indent" -> {
                 if (parts.length == 1) {
                     command = new PrintIndentCommand(document, 2); // 默认缩进2空格
                 } else if (parts.length == 2) {
@@ -110,63 +114,60 @@ public class HtmlEditor {
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "print-tree":
+            }
+            case "print-tree" -> {
                 if (parts.length == 1) {
                     command = new PrintTreeCommand(document);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "spell-check":
+            }
+            case "spell-check" -> {
                 if (parts.length == 1) {
                     command = new SpellCheckCommand(document);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "undo":
+            }
+            case "undo" -> {
                 if (parts.length == 1) {
                     command = new UndoCommand(commandExecutor);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "redo":
+            }
+            case "redo" -> {
                 if (parts.length == 1) {
                     command = new RedoCommand(commandExecutor);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "read":
+            }
+            case "read" -> {
                 if (parts.length == 2) {
+                    // 初始化一个新的文档，在CommandExecutor中会清空对前一个文档的操作记录
+                    this.document = new HtmlDocument();
                     command = new ReadCommand(document, parts[1]);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "save":
+            }
+            case "save" -> {
                 if (parts.length == 2) {
                     command = new SaveCommand(document, parts[1]);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            case "init":
+            }
+            case "init" -> {
                 if (parts.length == 1) {
                     command = new InitCommand(document);
                 } else {
                     throw new NotExistsException("command", line);
                 }
-                break;
-            default:
-//                System.out.println("Unknown command: " + line);
-//                break;
-                throw new NotExistsException("command", commandType);
+            }
+            default -> throw new NotExistsException("command", commandType);
         }
-
         return command;
     }
-
 }

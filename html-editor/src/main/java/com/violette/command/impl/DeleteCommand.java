@@ -14,7 +14,7 @@ import java.util.List;
  * @author Violette
  * @date 2024/10/31 17:10
  */
-public class DeleteCommand implements Command {
+public class DeleteCommand extends Command {
     private HtmlDocument document;
     private TagElement elementToDelete; // 要删除的元素
     private TagElement parentElement; // 要删除元素的父元素
@@ -28,6 +28,8 @@ public class DeleteCommand implements Command {
      * @throws NotExistsException 如果指定的元素ID不存在。
      */
     public DeleteCommand(HtmlDocument document, String elementId) throws NotExistsException {
+        super(CommandType.EDIT);
+
         this.document = document;
 
         // 查找指定ID的元素及其父元素
@@ -65,15 +67,5 @@ public class DeleteCommand implements Command {
     public void redo() {
         // 重做删除操作：再次从父元素中移除元素
         this.parentElement.removeChild(this.elementToDelete);
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
     }
 }

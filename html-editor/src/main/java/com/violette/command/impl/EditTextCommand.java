@@ -11,7 +11,7 @@ import com.violette.utils.DocumentUtil;
  * @author Violette
  * @date 2024/10/31 15:41
  */
-public class EditTextCommand implements Command {
+public class EditTextCommand extends Command {
     private HtmlDocument document; // HTML文档
     private TagElement targetElement; // 目标元素
     private TextElement oldTextElement; // 旧的文本元素
@@ -26,6 +26,8 @@ public class EditTextCommand implements Command {
      * @throws NotExistsException 如果指定的元素ID不存在。
      */
     public EditTextCommand(HtmlDocument document, String elementId, String newTextContent) throws NotExistsException {
+        super(CommandType.EDIT);
+
         this.document = document;
         this.newTextContent = newTextContent;
 
@@ -73,15 +75,5 @@ public class EditTextCommand implements Command {
     public void redo() {
         // 重做操作：执行相同的编辑操作
         execute();
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
     }
 }

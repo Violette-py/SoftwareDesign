@@ -27,8 +27,7 @@ public class UndoCommandTest {
     @Test
     public void testUndoEditCommand() {
         Command editCommand = mock(Command.class);
-        when(editCommand.isDisplayCommand()).thenReturn(false);
-        when(editCommand.isIOCommand()).thenReturn(false);
+        when(editCommand.getCommandType()).thenReturn(Command.CommandType.EDIT);
 
         commandExecutor.executeCommand(editCommand);
         commandExecutor.undo();
@@ -42,7 +41,7 @@ public class UndoCommandTest {
     @Test
     public void testUndoDisplayCommand() {
         Command displayCommand = mock(Command.class);
-        when(displayCommand.isDisplayCommand()).thenReturn(true);
+        when(displayCommand.getCommandType()).thenReturn(Command.CommandType.DISPLAY);
 
         commandExecutor.executeCommand(displayCommand);
         commandExecutor.undo();
@@ -56,7 +55,7 @@ public class UndoCommandTest {
     @Test
     public void testUndoIOCommand() {
         Command ioCommand = mock(Command.class);
-        when(ioCommand.isIOCommand()).thenReturn(true);
+        when(ioCommand.getCommandType()).thenReturn(Command.CommandType.IO);
 
         commandExecutor.executeCommand(ioCommand);
         commandExecutor.undo();

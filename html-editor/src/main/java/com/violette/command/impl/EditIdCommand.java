@@ -18,7 +18,7 @@ import lombok.Data;
  * @Param newId 新 id，注意 id 不能与其他元素重复
  */
 @Data
-public class EditIdCommand implements Command {
+public class EditIdCommand extends Command {
     private HtmlDocument document;
     private String oldId;
     private String newId;
@@ -33,6 +33,8 @@ public class EditIdCommand implements Command {
      * @throws RepeatedException 如果新ID已存在。
      */
     public EditIdCommand(HtmlDocument document, String oldId, String newId) throws NotExistsException, RepeatedException {
+        super(CommandType.EDIT);
+
         this.document = document;
         this.oldId = oldId;
         this.newId = newId;
@@ -65,15 +67,5 @@ public class EditIdCommand implements Command {
     public void redo() {
         // 重做更改，再次将ID更改为新值
         element.setId(newId);
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
     }
 }

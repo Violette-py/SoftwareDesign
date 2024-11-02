@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  * @date 2024/10/31 22:49
  * @description 将构建的HTML文档对象写入HTML文件
  */
-public class SaveCommand implements Command {
+public class SaveCommand extends Command {
     private HtmlDocument document;
     private String filepath;
 
@@ -27,6 +27,8 @@ public class SaveCommand implements Command {
      * @param filepath 写入文件的路径名。
      */
     public SaveCommand(HtmlDocument document, String filepath) {
+        super(CommandType.IO);
+
         this.document = document;
         this.filepath = filepath;
     }
@@ -72,15 +74,5 @@ public class SaveCommand implements Command {
     @Override
     public void redo() {
         // 执行输入/输出指令后，不允许撤销与重做
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return true;
     }
 }

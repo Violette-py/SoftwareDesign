@@ -7,11 +7,13 @@ import com.violette.editor.HtmlDocument;
  * @author Violette
  * @date 2024/10/31 3:24
  */
-public class PrintIndentCommand implements Command {
+public class PrintIndentCommand extends Command {
     private HtmlDocument document;
     private int indent;
 
     public PrintIndentCommand(HtmlDocument document, int indent) {
+        super(CommandType.DISPLAY);
+
         this.document = document;
         this.indent = indent;
     }
@@ -29,15 +31,5 @@ public class PrintIndentCommand implements Command {
     @Override
     public void redo() {
         // 显示类命令不需要重做
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return true;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
     }
 }

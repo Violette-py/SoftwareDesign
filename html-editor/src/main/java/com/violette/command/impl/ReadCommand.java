@@ -20,7 +20,7 @@ import java.io.IOException;
  * @date 2024/10/31 20:35
  * @description 从文件中读取HTML内容, 并将其转换为自己设计的HTML面向对象模型
  */
-public class ReadCommand implements Command {
+public class ReadCommand extends Command {
     private HtmlDocument document;
     private String filepath;
 
@@ -30,6 +30,8 @@ public class ReadCommand implements Command {
      * @param document HTML文档模型。
      */
     public ReadCommand(HtmlDocument document, String filepath) {
+        super(CommandType.IO);
+
         this.document = document;
         this.filepath = filepath;
     }
@@ -87,15 +89,5 @@ public class ReadCommand implements Command {
     @Override
     public void redo() {
         // 执行输入/输出指令后，不允许撤销与重做
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return true;
     }
 }

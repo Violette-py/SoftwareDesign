@@ -15,13 +15,15 @@ import lombok.Data;
  * @date 2024/10/30 23:58
  */
 @Data
-public class InsertCommand implements Command {
+public class InsertCommand extends Command {
     private HtmlDocument document;
     private TagElement newElement;
     private TagElement targetElement;   // 参考元素，即新元素将插入到该元素之前
     private TagElement parentElement; // 参考元素的直接父节点，用于插入新元素
 
     public InsertCommand(HtmlDocument document, String tagName, String idValue, String insertLocation, String textContent) throws NotExistsException, RepeatedException {
+        super(CommandType.EDIT);
+
         this.document = document;
         // 寻找插入位置
         Pair<TagElement, TagElement> result = DocumentUtil.findElementAndItsParentById(document, insertLocation);
@@ -58,15 +60,5 @@ public class InsertCommand implements Command {
         // 在 targetElement 之前插入
         int index = parentElement.getChildren().indexOf(targetElement);
         parentElement.addChild(index, newElement);
-    }
-
-    @Override
-    public boolean isDisplayCommand() {
-        return false;
-    }
-
-    @Override
-    public boolean isIOCommand() {
-        return false;
     }
 }
