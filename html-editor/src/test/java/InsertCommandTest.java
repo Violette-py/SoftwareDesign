@@ -1,3 +1,4 @@
+import com.violette.command.Command;
 import com.violette.command.impl.InsertCommand;
 import com.violette.editor.HtmlDocument;
 import com.violette.editor.HtmlElement;
@@ -89,5 +90,45 @@ public class InsertCommandTest {
         assertThrows(NotExistsException.class, () -> {
             new InsertCommand(document, "span", "newSpan", "nonExistingId", "");
         });
+    }
+
+    /**
+     * 测试撤销插入操作
+     */
+    @Test
+    public void testUndoInsertCommand() throws NotExistsException, RepeatedException {
+        // 执行插入命令
+        Command insertCommand = new InsertCommand(document, "span", "newSpan", "p1", "Sample Text");
+        insertCommand.execute();
+        assertEquals(2, ((TagElement) document.getBody().getChildren().get(0)).getChildren().size()); // div should now have 2 children
+
+        // 执行撤销操作
+        insertCommand.undo();
+        TagElement div = (TagElement) document.getBody().getChildren().get(0);
+        assertEquals(1, div.getChildren().size()); // div should revert to having 1 child
+        assertNull(div.getChildren().stream().filter(child -> "newSpan".equals(((TagElement) child).getId())).findFirst().orElse(null));
+    }
+
+    /**
+     * 测试重做插入操作
+     */
+    @Test
+    public void testRedoInsertCommand() throws NotExistsException, RepeatedException {
+        // 执行插入命令
+        Command insertCommand = new InsertCommand(document, "span", "newSpan", "p1", "Sample Text");
+        insertCommand.execute();
+        assertEquals(2, ((TagElement) document.getBody().getChildren().get(0)).getChildren().size()); // div should now have 2 children
+
+        // 执行撤销操作
+        insertCommand.undo();
+        assertEquals(1, ((TagElement) document.getBody().getChildren().get(0)).getChildren().size()); // div should revert to having 1 child
+
+        // 执行重做操作
+        insertCommand.redo();
+        assertEquals(2, ((TagElement) document.getBody().getChildren().get(0)).getChildren().size()); // div should now have 2 children again
+        TagElement insertedSpan = (TagElement) ((TagElement) document.getBody().getChildren().get(0)).getChildren().get(0);
+        assertEquals("span", insertedSpan.getTagName());
+        assertEquals("newSpan", insertedSpan.getId());
+        assertEquals("Sample Text", ((TextElement) insertedSpan.getChildren().get(0)).getText());
     }
 }

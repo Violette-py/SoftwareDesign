@@ -50,14 +50,14 @@ public class InsertCommand implements Command {
 
     @Override
     public void undo() {
-        parentElement.getChildren().remove(newElement);
+        parentElement.removeChild(newElement);
     }
 
     @Override
     public void redo() {
         // 在 targetElement 之前插入
         int index = parentElement.getChildren().indexOf(targetElement);
-        parentElement.getChildren().add(index, newElement);
+        parentElement.addChild(index, newElement);
     }
 
     @Override
