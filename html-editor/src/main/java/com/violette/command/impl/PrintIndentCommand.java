@@ -18,7 +18,7 @@ public class PrintIndentCommand implements Command {
 
     @Override
     public void execute() {
-        document.printIndent(indent);
+        document.printIndent(indent, 0);
     }
 
     @Override

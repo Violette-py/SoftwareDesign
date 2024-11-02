@@ -43,12 +43,12 @@ public class TagElement extends HtmlElement {
     }
 
     @Override
-    public void printIndent(int indent) {
-        System.out.println(" ".repeat(indent) + "<" + this.tagName + (this.id != null ? " id=\"" + id + "\"" : "") + ">");
+    public void printIndent(int indent, int prefix) {
+        System.out.println(" ".repeat(indent + prefix) + "<" + this.tagName + (this.defaultElement.contains(tagName) ? "" : " id=\"" + id + "\"") + ">");
         for (HtmlElement child : this.children) {
-            child.printIndent(indent + 2);
+            child.printIndent(indent, indent + prefix);
         }
-        System.out.println(" ".repeat(indent) + "</" + this.tagName + ">");
+        System.out.println(" ".repeat(indent + prefix) + "</" + this.tagName + ">");
     }
 
     @Override

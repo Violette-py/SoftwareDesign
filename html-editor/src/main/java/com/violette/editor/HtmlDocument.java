@@ -25,6 +25,15 @@ public class HtmlDocument extends TagElement {
     }
 
     @Override
+    public void printIndent(int indent, int prefix) {
+        System.out.println("<" + this.getTagName() + ">");
+        for (HtmlElement child : this.getChildren()) {
+            child.printIndent(indent, prefix);
+        }
+        System.out.println("</" + this.getTagName() + ">");
+    }
+
+    @Override
     public void printTree(TagElement parentElement, String prefix) {
         System.out.println(this.getTagName());
         for (int i = 0; i < this.getChildren().size(); i++) {

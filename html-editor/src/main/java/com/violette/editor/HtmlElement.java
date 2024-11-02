@@ -11,7 +11,7 @@ public abstract class HtmlElement {
     String[] defaultElementName = {"html", "head", "title", "body"};
     public List<String> defaultElement = new ArrayList<>(Arrays.asList(defaultElementName));
 
-    abstract void printIndent(int indent);
+    abstract void printIndent(int indent, int prefix);
 
     abstract void printTree(TagElement parentElement, String prefix);
 

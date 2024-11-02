@@ -17,8 +17,8 @@ public class TextElement extends HtmlElement {
 
 
     @Override
-    public void printIndent(int indent) {
-        System.out.println(" ".repeat(indent) + this.text);
+    public void printIndent(int indent, int prefix) {
+        System.out.println(" ".repeat(indent + prefix) + this.text);
     }
 
     @Override
