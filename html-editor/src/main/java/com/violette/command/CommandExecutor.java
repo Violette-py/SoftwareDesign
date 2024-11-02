@@ -1,5 +1,7 @@
 package com.violette.command;
 
+import lombok.Data;
+
 import java.util.Stack;
 
 /**
@@ -7,6 +9,7 @@ import java.util.Stack;
  * @date 2024/10/31 1:31
  * @description 命令模式中的invoker,负责调用命令(传递给具体命令执行),管理命令的执行顺序(保存执行历史和重做栈)
  */
+@Data
 public class CommandExecutor {
     private Stack<Command> history = new Stack<>();
     private Stack<Command> redoStack = new Stack<>();
