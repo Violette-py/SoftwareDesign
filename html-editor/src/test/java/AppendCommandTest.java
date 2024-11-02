@@ -96,21 +96,40 @@ public class AppendCommandTest {
         });
     }
 
-//    @Test
-//    public void testUndoAndRedoAppendCommand() {
-//        try {
-//            // 测试撤销和重做追加操作
-//            Command appendCommand = new AppendCommand(document, "p", "newParagraph", "body", "This is a new paragraph.");
-//            appendCommand.execute();
-//            assertEquals(1, document.getChildren().size(), "Body should contain one child after appending a new element.");
-//
-//            appendCommand.undo();
-//            assertEquals(0, document.getChildren().size(), "Body should be empty after undoing the append operation.");
-//
-//            appendCommand.redo();
-//            assertEquals(1, document.getChildren().size(), "Body should contain one child after redoing the append operation.");
-//        } catch (Exception e) {
-//            fail("AppendCommand construction or execution failed with exception: " + e.getMessage());
-//        }
-//    }
+    /**
+     * 测试撤销追加操作
+     */
+    @Test
+    public void testAppendCommandUndo() {
+        try {
+            Command appendCommand = new AppendCommand(document, "p", "newParagraph", "body", "This is a new paragraph.");
+            appendCommand.execute();
+            assertEquals(1, document.getBody().getChildren().size(), "Body should contain one child after appending a new element.");
+
+            appendCommand.undo();
+            assertEquals(0, document.getBody().getChildren().size(), "Body should be empty after undoing the append operation.");
+        } catch (Exception e) {
+            fail("AppendCommand construction or execution failed with exception: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 测试重做追加操作
+     */
+    @Test
+    public void testAppendCommandRedo() {
+        try {
+            Command appendCommand = new AppendCommand(document, "p", "newParagraph", "body", "This is a new paragraph.");
+            appendCommand.execute();
+            assertEquals(1, document.getBody().getChildren().size(), "Body should contain one child after appending a new element.");
+
+            appendCommand.undo();
+            assertEquals(0, document.getBody().getChildren().size(), "Body should be empty after undoing the append operation.");
+
+            appendCommand.redo();
+            assertEquals(1, document.getBody().getChildren().size(), "Body should contain one child after redoing the append operation.");
+        } catch (Exception e) {
+            fail("AppendCommand construction or execution failed with exception: " + e.getMessage());
+        }
+    }
 }

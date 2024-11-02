@@ -12,7 +12,7 @@ import com.violette.utils.DocumentUtil;
  * @author Violette
  * @date 2024/10/31 13:19
  * @description 在某元素内插入新元素
- *
+ * <p>
  * append tagName idValue parentElement [textContent]
  * @Param tagName 新元素的元素标签
  * @Param idValue 新元素的 id，注意 id 不能与其他元素重复
@@ -50,7 +50,7 @@ public class AppendCommand implements Command {
 
     @Override
     public void undo() {
-        parentElement.getChildren().remove(newElement);
+        parentElement.removeChild(newElement);
     }
 
     @Override
