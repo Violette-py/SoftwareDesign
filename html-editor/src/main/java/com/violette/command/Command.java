@@ -18,6 +18,10 @@ public abstract class Command {
 
     public CommandType commandType; // 命令类型字段
 
+    public Command() {
+
+    }
+
     /**
      * Command 的构造函数。
      * @param commandType 命令类型。
