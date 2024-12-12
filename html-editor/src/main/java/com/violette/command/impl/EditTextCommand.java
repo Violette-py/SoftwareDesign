@@ -45,7 +45,7 @@ public class EditTextCommand extends Command {
     public void execute() {
         // 移除旧的文本元素（如果有）
         if (oldTextElement != null) {
-            targetElement.getChildren().remove(oldTextElement);
+            targetElement.removeChild(oldTextElement);
         }
 
         // 如果有新的文本内容，添加为第一个孩子
