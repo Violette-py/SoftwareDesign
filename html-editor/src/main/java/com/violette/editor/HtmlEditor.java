@@ -24,14 +24,12 @@ public class HtmlEditor implements Serializable {
     private String filepath;
     private HtmlDocument document;
     private CommandExecutor commandExecutor;
-    private Boolean showId; // print-tree时是否显示id
     private Boolean isSaved; // 当前文件是否被编辑过
 
     public HtmlEditor(String filepath) {
         this.filepath = filepath;
         this.document = new HtmlDocument();
         this.commandExecutor = new CommandExecutor();
-        this.showId = true;
         this.isSaved = true;
     }
 
@@ -49,5 +47,13 @@ public class HtmlEditor implements Serializable {
         }
         // 设置保存状态
         this.setIsSaved(true);
+    }
+
+    public void setShowId(Boolean showId) {
+        this.document.setShowId(showId);
+    }
+
+    public Boolean getShowId() {
+        return this.document.getShowId();
     }
 }

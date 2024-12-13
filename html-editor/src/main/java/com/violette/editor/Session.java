@@ -115,6 +115,13 @@ public class Session {
     }
 
     /*
+     * 设置当前editor的showId
+     * */
+    public void setCurrEditorShowId(boolean showId) {
+        this.activeEditor.setShowId(showId);
+    }
+
+    /*
      * 关闭 Active Editor
      * 如果 Active Editor 中的文件修改过，则询问是否需要保存
      * 关闭后 Active Editor 变为打开的编辑器列表中第一个；如果 Session 中没有其他的 Editor，则没有Active Editor。

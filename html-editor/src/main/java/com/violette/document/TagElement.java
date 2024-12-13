@@ -34,12 +34,16 @@ public class TagElement extends HtmlElement {
         this.children.add(element);
     }
 
-    public void addChild(int index,HtmlElement element) {
+    public void addChild(int index, HtmlElement element) {
         this.children.add(index, element);
     }
 
     public void removeChild(HtmlElement element) {
         this.children.remove(element);
+    }
+
+    public void clearChildren() {
+        this.children.clear();
     }
 
     @Override
@@ -52,17 +56,17 @@ public class TagElement extends HtmlElement {
     }
 
     @Override
-    public void printTree(TagElement parentElement, String prefix) { // 父元素一定是TagElement类型
+    public void printTree(TagElement parentElement, String prefix, Boolean showId) { // 父元素一定是TagElement类型
         boolean isLast = isLastChild(parentElement);
         String currContent = prefix;
         currContent += isLast ? "└── " : "├── ";
         currContent += tagName;
-        currContent += this.defaultElement.contains(tagName) ? "" : "#" + id;
+        currContent += showId && !this.defaultElement.contains(tagName) ? "#" + id : "";
         System.out.println(currContent);
 
         for (HtmlElement child : children) {
             String childPrefix = isLast ? prefix + "    " : prefix + "│   ";
-            child.printTree(this, childPrefix);
+            child.printTree(this, childPrefix, showId);
         }
     }
 }

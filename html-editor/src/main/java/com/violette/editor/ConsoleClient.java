@@ -149,6 +149,13 @@ public class ConsoleClient {
                         throw new NotExistsException("command", line);
                     }
                 }
+                case "showid" -> {
+                    if (parts.length == 2) {
+                        command = new ShowIdCommand(this.session, Boolean.parseBoolean(parts[1]));
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
+                }
                 // 撤销与重做
                 case "undo" -> {
                     if (parts.length == 1) {
@@ -173,7 +180,7 @@ public class ConsoleClient {
                         throw new NotExistsException("command", line);
                     }
                 }
-                case "saveActiveEditor" -> {
+                case "save" -> {
                     if (parts.length == 1) {
                         // 保存 activeEditor 中的文件内容
                         command = new SaveCommand(this.session);

@@ -18,7 +18,7 @@ public class PrintTreeCommand extends Command {
 
     @Override
     public void execute() {
-        document.printTree(null, "");
+        document.printTree(null, "", true);
     }
 
     @Override

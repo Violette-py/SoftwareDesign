@@ -13,7 +13,7 @@ public abstract class HtmlElement {
 
     abstract void printIndent(int indent, int prefix);
 
-    abstract void printTree(TagElement parentElement, String prefix);
+    abstract void printTree(TagElement parentElement, String prefix, Boolean showId);
 
     public boolean isLastChild(TagElement parentElement) {
         if (parentElement == null) {

@@ -25,7 +25,7 @@ public class TextElement extends HtmlElement {
     }
 
     @Override
-    public void printTree(TagElement parentElement, String prefix) {
+    public void printTree(TagElement parentElement, String prefix, Boolean showId) {
         String connector = isLastChild(parentElement) ? "└── " : "├── ";
         String spellCheckLabel = this.hasSpellingError ? "[X] " : "";
         System.out.println(prefix + connector + spellCheckLabel + text);
