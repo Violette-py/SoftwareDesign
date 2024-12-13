@@ -2,9 +2,7 @@ package com.violette.command.impl;
 
 import com.violette.command.Command;
 import com.violette.document.HtmlDocument;
-import com.violette.document.TagElement;
-import com.violette.document.TextElement;
-import com.violette.utils.HTMLParser;
+import com.violette.utils.HtmlConverter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 
@@ -39,7 +37,7 @@ public class LoadCommand extends Command {
             try {
                 // 使用Jsoup读取和解析HTML文件
                 Document jsoupDoc = Jsoup.parse(file, "UTF-8");
-                HTMLParser.convertToModel(jsoupDoc.child(0), this.document); // 从html元素开始
+                HtmlConverter.convertJsoupModelToCustomModel(jsoupDoc.child(0), this.document); // 从html元素开始
             } catch (IOException e) {
                 throw new RuntimeException("Failed to read HTML file: " + filepath, e);
             }

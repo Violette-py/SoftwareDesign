@@ -5,6 +5,7 @@ import com.violette.document.HtmlDocument;
 import com.violette.document.HtmlElement;
 import com.violette.document.TagElement;
 import com.violette.document.TextElement;
+import com.violette.utils.HtmlConverter;
 import org.jsoup.nodes.*;
 
 import java.io.FileWriter;
@@ -37,7 +38,7 @@ public class SaveCommand extends Command {
     public void execute() {
         // 创建Jsoup文档对象
         Document jsoupDoc = new Document("");
-        Node rootElement = createJsoupElement(document);
+        Node rootElement = HtmlConverter.convertCustomModelToJsoupModel(document);
         jsoupDoc.appendChild(rootElement); // 将根元素添加到文档中
         // 将Jsoup文档对象保存为HTML文件
         try (FileWriter writer = new FileWriter(this.filepath, StandardCharsets.UTF_8)) {
@@ -45,25 +46,6 @@ public class SaveCommand extends Command {
         } catch (IOException e) {
             throw new RuntimeException("Failed to save HTML document to file: " + filepath, e);
         }
-    }
-
-    /**
-     * 递归将自定义的HTML模型转换为Jsoup的Document对象。
-     *
-     * @param htmlElement 自定义的HtmlElement对象。
-     * @return Jsoup的Document对象。
-     */
-    private Node createJsoupElement(HtmlElement htmlElement) {
-        if (htmlElement instanceof TextElement textElement) {
-            return new TextNode(textElement.getText());
-        } else if (htmlElement instanceof TagElement tagElement) {
-            Element jsoupElement = new Element(tagElement.getTagName()).attr("id", tagElement.getId());
-            for (HtmlElement child : tagElement.getChildren()) {
-                jsoupElement.appendChild(createJsoupElement(child));
-            }
-            return jsoupElement;
-        }
-        return new TextNode("");
     }
 
     @Override

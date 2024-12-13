@@ -193,6 +193,13 @@ public class Session {
                         throw new NotExistsException("command", line);
                     }
                 }
+                case "save" -> {
+                    if (parts.length == 2) {
+                        command = new SaveCommand(document, parts[1]);
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
+                }
             /*
             case "read" -> {
                 if (parts.length == 2) {
