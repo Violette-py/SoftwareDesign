@@ -17,6 +17,7 @@ public class ConsoleClient {
 
     public ConsoleClient() {
         this.session = new Session();
+        session.loadState(); // 恢复上次工作状态
     }
 
     public void start() {
@@ -28,13 +29,10 @@ public class ConsoleClient {
             System.out.println("Enter command:");
             // 读取用户输入
             String line = scanner.nextLine().trim();
-            if ("exit".equalsIgnoreCase(line)) {
-                break;
-            }
             // 解析命令
             Command parsedCommand = this.parseCommand(line);
-            if (isFirstCommand && !(parsedCommand instanceof LoadCommand)) {
-                System.out.println("First Command must be [load]");
+            if (isFirstCommand && !(parsedCommand instanceof LoadCommand || parsedCommand instanceof EditorListCommand)) {
+                System.out.println("First Command must be [load] or [editor-list]");
                 continue;
             }
             isFirstCommand = false;
@@ -45,7 +43,7 @@ public class ConsoleClient {
             }
         }
 
-        scanner.close();
+//        scanner.close();
     }
 
     public Command parseCommand(String line) {
@@ -68,8 +66,8 @@ public class ConsoleClient {
         String[] params;
 
         try {
-            // 当前activeEditor = null, 且非 load命令
-            if (activeEditor == null && !commandType.equals("load")) {
+            // 当前activeEditor = null, 且非 load命令或editor-list命令
+            if (activeEditor == null && !(commandType.equals("load") || commandType.equals("editor-list"))) {
                 throw new NotExistsException("editor");
             }
 
@@ -175,7 +173,7 @@ public class ConsoleClient {
                         throw new NotExistsException("command", line);
                     }
                 }
-                case "save" -> {
+                case "saveActiveEditor" -> {
                     if (parts.length == 1) {
                         // 保存 activeEditor 中的文件内容
                         command = new SaveCommand(this.session);
@@ -193,6 +191,13 @@ public class ConsoleClient {
                 case "close" -> {
                     if (parts.length == 1) {
                         command = new CloseCommand(this.session);
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
+                }
+                case "exit" -> {
+                    if (parts.length == 1) {
+                        command = new ExitCommand(this.session);
                     } else {
                         throw new NotExistsException("command", line);
                     }

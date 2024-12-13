@@ -5,18 +5,17 @@ import com.violette.editor.Session;
 
 /**
  * @author Violette
- * @date 2024/10/31 22:49
- * @description 将构建的HTML文档对象写入HTML文件
+ * @date 2024/12/13 21:21
  */
-public class SaveCommand extends Command {
+public class ExitCommand extends Command {
     private Session session;
 
     /**
-     * SaveCommand 的构造函数。
+     * ExitCommand 的构造函数。
      *
      * @param session 当前会话。
      */
-    public SaveCommand(Session session) {
+    public ExitCommand(Session session) {
         super(CommandType.IO);
 
         this.session = session;
@@ -24,16 +23,16 @@ public class SaveCommand extends Command {
 
     @Override
     public void execute() {
-        this.session.saveActiveEditor();
+        session.exit();
     }
 
     @Override
     public void undo() {
-        // 执行输入/输出指令后，不允许撤销与重做
+
     }
 
     @Override
     public void redo() {
-        // 执行输入/输出指令后，不允许撤销与重做
+
     }
 }
