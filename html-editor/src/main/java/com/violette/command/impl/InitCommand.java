@@ -1,7 +1,7 @@
 package com.violette.command.impl;
 
 import com.violette.command.Command;
-import com.violette.editor.HtmlDocument;
+import com.violette.document.HtmlDocument;
 
 /**
  * @author Violette

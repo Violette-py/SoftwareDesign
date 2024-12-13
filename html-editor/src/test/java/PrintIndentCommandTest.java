@@ -1,8 +1,8 @@
 import com.violette.command.Command;
 import com.violette.command.impl.PrintIndentCommand;
-import com.violette.editor.HtmlDocument;
-import com.violette.editor.TagElement;
-import com.violette.editor.TextElement;
+import com.violette.document.HtmlDocument;
+import com.violette.document.TagElement;
+import com.violette.document.TextElement;
 import com.violette.utils.CapturingPrintStream;
 import org.junit.Before;
 import org.junit.Test;

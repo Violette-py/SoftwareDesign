@@ -1,4 +1,4 @@
-package com.violette.editor;
+package com.violette.document;
 
 import lombok.Data;
 

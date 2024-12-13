@@ -1,9 +1,9 @@
 package com.violette.command.impl;
 
 import com.violette.command.Command;
-import com.violette.editor.HtmlDocument;
-import com.violette.editor.TagElement;
-import com.violette.editor.TextElement;
+import com.violette.document.HtmlDocument;
+import com.violette.document.TagElement;
+import com.violette.document.TextElement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

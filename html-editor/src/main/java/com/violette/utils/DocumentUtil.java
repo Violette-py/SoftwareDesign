@@ -1,8 +1,8 @@
 package com.violette.utils;
 
-import com.violette.editor.HtmlElement;
-import com.violette.editor.TagElement;
-import com.violette.editor.TextElement;
+import com.violette.document.HtmlElement;
+import com.violette.document.TagElement;
+import com.violette.document.TextElement;
 
 import java.util.List;
 

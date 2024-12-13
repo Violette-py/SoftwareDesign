@@ -5,7 +5,7 @@
 
 import com.violette.command.Command;
 import com.violette.command.CommandExecutor;
-import com.violette.editor.HtmlDocument;
+import com.violette.document.HtmlDocument;
 import org.junit.Before;
 import org.junit.Test;
 
