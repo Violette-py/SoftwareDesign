@@ -26,7 +26,7 @@ public class Session {
         this.activeEditor = null;
     }
 
-    private void addEditor(String filepath) throws RepeatedException {
+    public HtmlEditor addEditor(String filepath) throws RepeatedException {
         // FIXME: 文件已经装入过，给出错误提示
         if (editorList.stream().anyMatch(editor -> editor.getFilepath().equals(filepath))) {
             throw new RepeatedException("filepath", filepath, "editor");
@@ -36,6 +36,19 @@ public class Session {
         this.editorList.add(editor);
         // 自动切换为 activeEditor
         this.activeEditor = editor;
+
+        return editor;
+    }
+
+    public void switchActiveEditor(String filepath) throws NotExistsException {
+        // 文件未装入editor
+        if (this.editorList.stream().noneMatch(editor -> editor.getFilepath().equals(filepath))) {
+            throw new NotExistsException("filepath", filepath, "editor");
+        }
+        this.activeEditor = this.editorList.stream()
+                .filter(editor -> filepath.equals(editor.getFilepath()))
+                .findFirst()
+                .orElse(null);
     }
 
     public void start() {
@@ -194,6 +207,14 @@ public class Session {
                     if (parts.length == 1) {
                         // 保存 activeEditor 中的文件内容
                         command = new SaveCommand(document, this.activeEditor.getFilepath());
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
+                }
+                case "edit" -> {
+                    if (parts.length == 2) {
+                        // 切换 activeEditor
+                        command = new EditCommand(this, parts[1]);
                     } else {
                         throw new NotExistsException("command", line);
                     }

@@ -1,5 +1,6 @@
 package com.violette.command;
 
+import com.violette.exception.NotExistsException;
 import lombok.Data;
 
 /**
