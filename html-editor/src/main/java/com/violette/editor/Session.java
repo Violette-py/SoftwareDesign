@@ -9,10 +9,7 @@ import com.violette.exception.RepeatedException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author Violette
@@ -22,26 +19,33 @@ import java.util.Scanner;
 @Slf4j
 public class Session {
     // filepath -> HtmlEditor(每个Editor中有独立的undo、redo栈)
-    private Map<String, HtmlEditor> editorMap;
+//    private Map<String, HtmlEditor> editorMap;
+    private List<HtmlEditor> editors;
     // 每个 session 有一个活动的 editor
     private HtmlEditor activeEditor;
     // 每个 session 有一个命令行客户端
 //    private ConsoleClient consoleClient;
 
     public Session() {
-        this.editorMap = new HashMap<>();
+        this.editors = new ArrayList<>();
         this.activeEditor = null;
 //        this.consoleClient = new ConsoleClient();
     }
 
     private HtmlEditor addEditor(String filepath) throws RepeatedException {
         // 文件已经装入过，给出错误提示
-        if (this.editorMap.containsKey(filepath)) {
+        if (editors.stream().anyMatch(editor -> editor.getFilepath().equals(filepath))) {
             throw new RepeatedException("filepath", filepath, "editor");
         }
-        // 装入 Map
-        HtmlEditor editor = new HtmlEditor();
-        this.editorMap.put(filepath, editor);
+//        if (this.editorMap.containsKey(filepath)) {
+//            throw new RepeatedException("filepath", filepath, "editor");
+//        }
+
+        // 新建 editor，并加入 list
+        HtmlEditor editor = new HtmlEditor(filepath);
+        this.editors.add(editor);
+        // this.editorMap.put(filepath, editor);
+
         // 自动切换为 activeEditor
         this.activeEditor = editor;
 
@@ -194,8 +198,9 @@ public class Session {
                     }
                 }
                 case "save" -> {
-                    if (parts.length == 2) {
-                        command = new SaveCommand(document, parts[1]);
+                    if (parts.length == 1) {
+                        // 保存 activeEditor 中的文件内容
+                        command = new SaveCommand(document, this.activeEditor.getFilepath());
                     } else {
                         throw new NotExistsException("command", line);
                     }

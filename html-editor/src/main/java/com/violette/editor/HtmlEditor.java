@@ -10,12 +10,14 @@ import lombok.Data;
  */
 @Data
 public class HtmlEditor {
+    private String filepath;
     private HtmlDocument document;
     private CommandExecutor commandExecutor;
     //    private boolean showId;
     private boolean isSaved;
 
-    public HtmlEditor() {
+    public HtmlEditor(String filepath) {
+        this.filepath = filepath;
         this.document = new HtmlDocument();
         this.commandExecutor = new CommandExecutor();
 //        this.showId = true;
