@@ -3,6 +3,9 @@ import com.violette.command.impl.SaveCommand;
 import com.violette.document.HtmlDocument;
 import com.violette.document.TagElement;
 import com.violette.document.TextElement;
+import com.violette.editor.HtmlEditor;
+import com.violette.editor.Session;
+import com.violette.exception.RepeatedException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,6 +14,7 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static org.junit.Assert.*;
 
@@ -19,16 +23,20 @@ import static org.junit.Assert.*;
  * @date 2024/10/31 23:36
  */
 public class SaveCommandTest {
-    private HtmlDocument document;
-    private File tempFile;
+    private Session session;
+    String tempFilePath;
+    HtmlEditor currEditor;
 
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Before
-    public void setUp() throws IOException {
-        document = new HtmlDocument();
-        document.init();
+    public void setUp() throws IOException, RepeatedException {
+        session = new Session();
+
+        tempFilePath = testFolder.getRoot().getAbsolutePath() + File.separator + "testSave.html";
+        currEditor = session.addEditor(tempFilePath);
+        currEditor.getDocument().init();
 
         // 向 body 添加一些元素用于测试
         TagElement p1 = new TagElement("p", "p1");
@@ -38,32 +46,28 @@ public class SaveCommandTest {
         TagElement div = new TagElement("div", "div1");
         div.addChild(p1);
         div.addChild(p2);
-        document.getBody().addChild(div);
+        currEditor.getDocument().getBody().addChild(div);
 
         TagElement span = new TagElement("span", "span1");
         TextElement spanText = new TextElement("Span Text");
         span.addChild(spanText);
-        document.getBody().addChild(span);
+        currEditor.getDocument().getBody().addChild(span);
     }
 
     @Test
     public void testSaveHtmlFile() throws IOException {
-        // 创建一个临时文件路径
-        tempFile = testFolder.newFile("testSave.html");
-        String tempFilePath = tempFile.getAbsolutePath();
-
         // 执行SaveCommand
-        Command saveCommand = new SaveCommand(document, tempFilePath);
+        Command saveCommand = new SaveCommand(this.session);
         saveCommand.execute();
 
         // 验证文件内容是否正确
-        String content = Files.readString(tempFile.toPath());
+        String content = Files.readString(Paths.get(tempFilePath));
         assertTrue(content.contains("<div id=\"div1\">"));
         assertTrue(content.contains("<p id=\"p1\">Hello World</p>"));
         assertTrue(content.contains("<p id=\"p2\"></p>"));
         assertTrue(content.contains("<span id=\"span1\">Span Text</span>"));
 
         // 验证文件路径
-        System.out.println("File saved to: " + tempFile.getAbsolutePath());
+        System.out.println("File saved to: " + tempFilePath);
     }
 }

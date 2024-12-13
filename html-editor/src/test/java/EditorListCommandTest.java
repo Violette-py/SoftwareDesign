@@ -1,5 +1,7 @@
 import com.violette.command.impl.EditorListCommand;
 import com.violette.editor.HtmlEditor;
+import com.violette.editor.Session;
+import com.violette.exception.RepeatedException;
 import com.violette.utils.CapturingPrintStream;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,31 +17,30 @@ import java.util.List;
  * @date 2024/12/13 16:07
  */
 public class EditorListCommandTest {
-    private List<HtmlEditor> editorList;
-    private HtmlEditor activeEditor;
+    private Session session;
 
     @Before
-    public void setUp() throws IOException {
-        editorList = new ArrayList<>();
+    public void setUp() throws IOException, RepeatedException {
+        session = new Session();
+
         // 创建几个HtmlEditor实例用于测试
         for (int i = 0; i < 3; i++) {
             String filepath = "file" + i + ".html";
-            HtmlEditor editor = new HtmlEditor(filepath);
+            HtmlEditor editor = this.session.addEditor(filepath);
             editor.setIsSaved(i != 2); // 假设第三个编辑器未保存
-            editorList.add(editor);
         }
 
-        activeEditor = editorList.get(1); // 假设第二个编辑器为活跃状态
+        session.setActiveEditor(session.getEditorList().get(1)); // 假设第二个编辑器为活跃状态
     }
 
     @Test
     public void testEditorListCommand() {
         try {
-            EditorListCommand editorListCommand = new EditorListCommand(editorList, activeEditor);
+            EditorListCommand editorListCommand = new EditorListCommand(session);
 
             StringBuilder expectedOutput = new StringBuilder();
-            for (int i = 0; i < editorList.size(); i++) {
-                HtmlEditor editor = editorList.get(i);
+            for (int i = 0; i < session.getEditorList().size(); i++) {
+                HtmlEditor editor = session.getEditorList().get(i);
                 String prefix = (i == 1) ? "> " : "  "; // 活跃编辑器前显示">"
                 expectedOutput.append(prefix);
                 expectedOutput.append(editor.getFilepath());

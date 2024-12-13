@@ -4,6 +4,7 @@ import com.violette.document.HtmlDocument;
 import com.violette.document.HtmlElement;
 import com.violette.document.TagElement;
 import com.violette.document.TextElement;
+import com.violette.editor.Session;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,25 +26,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @date 2024/12/13 14:34
  */
 public class LoadCommandTest {
-    private HtmlDocument document;
-
+    private Session session;
     @Rule
     public TemporaryFolder testFolder = new TemporaryFolder();
 
     @Before
     public void setUp() throws IOException {
-        document = new HtmlDocument();
+        session = new Session();
     }
 
     /*
-    * 装入的文件不存在时，新建文件并提供初始 html 模板 （Lab1的init功能）
-    * */
+     * 装入的文件不存在时，新建文件并提供初始 html 模板 （Lab1的init功能）
+     * */
     @Test
     public void testLoadNotExistedHtmlFile() {
         // 创建一个不存在的文件路径，并执行load命令
         File nonExistentFile = new File(testFolder.getRoot(), "non_existent.html");
-        LoadCommand loadCommand = new LoadCommand(document, nonExistentFile.getAbsolutePath());
+        LoadCommand loadCommand = new LoadCommand(this.session, nonExistentFile.getAbsolutePath());
         loadCommand.execute();
+
+        HtmlDocument document = this.session.getActiveEditor().getDocument();
 
         System.out.println("after load:");
         document.printTree();
@@ -74,8 +76,8 @@ public class LoadCommandTest {
     }
 
     /*
-    * 装入文件已存在，直接读入
-    * */
+     * 装入文件已存在，直接读入
+     * */
     @Test
     public void testLoadExistedHtmlFile() throws IOException {
         // 准备数据
@@ -102,18 +104,19 @@ public class LoadCommandTest {
         Files.writeString(path, testHtmlContent);
 
         // 执行命令
-        Command loadCommand = new LoadCommand(document, testHtmlFile.getAbsolutePath());
+        Command loadCommand = new LoadCommand(this.session, testHtmlFile.getAbsolutePath());
         loadCommand.execute();
+
+        HtmlDocument document = this.session.getActiveEditor().getDocument();
 
         System.out.println("after load:");
         document.printTree();
 
         // 验证HTML结构是否正确读取
-        TagElement htmlElement = document;
-        assertEquals("html", htmlElement.getTagName());
-        assertEquals(2, htmlElement.getChildren().size()); // html should have head and body
+        assertEquals("html", document.getTagName());
+        assertEquals(2, document.getChildren().size()); // html should have head and body
 
-        TagElement head = findChildById(htmlElement, "head");
+        TagElement head = findChildById(document, "head");
         assertNotNull("Head element should not be null", head);
         assertEquals("head", head.getTagName());
         assertEquals(1, head.getChildren().size()); // head should have title
@@ -123,7 +126,7 @@ public class LoadCommandTest {
         assertEquals("title", title.getTagName());
         assertEquals("HTML Document: Test 1", ((TextElement) title.getChildren().get(0)).getText());
 
-        TagElement body = findChildById(htmlElement, "body");
+        TagElement body = findChildById(document, "body");
         assertNotNull("Body element should not be null", body);
         assertEquals("body", body.getTagName());
         assertEquals(4, body.getChildren().size()); // body should have h1, p, ul, and div

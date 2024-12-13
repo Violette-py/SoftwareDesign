@@ -1,10 +1,10 @@
 package com.violette;
 
-import com.violette.editor.Session;
+import com.violette.editor.ConsoleClient;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        Session session = new Session();
-        session.start();
+        ConsoleClient client = new ConsoleClient();
+        client.start();
     }
 }
