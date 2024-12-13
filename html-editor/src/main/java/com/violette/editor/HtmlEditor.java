@@ -14,7 +14,7 @@ public class HtmlEditor {
     private HtmlDocument document;
     private CommandExecutor commandExecutor;
     //    private boolean showId;
-    private boolean isSaved;
+    private Boolean isSaved;
 
     public HtmlEditor(String filepath) {
         this.filepath = filepath;

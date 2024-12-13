@@ -18,38 +18,24 @@ import java.util.*;
 @Data
 @Slf4j
 public class Session {
-    // filepath -> HtmlEditor(每个Editor中有独立的undo、redo栈)
-//    private Map<String, HtmlEditor> editorMap;
-    private List<HtmlEditor> editors;
-    // 每个 session 有一个活动的 editor
-    private HtmlEditor activeEditor;
-    // 每个 session 有一个命令行客户端
-//    private ConsoleClient consoleClient;
+    private List<HtmlEditor> editorList;
+    private HtmlEditor activeEditor;  // 当前编辑的 editor
 
     public Session() {
-        this.editors = new ArrayList<>();
+        this.editorList = new ArrayList<>();
         this.activeEditor = null;
-//        this.consoleClient = new ConsoleClient();
     }
 
-    private HtmlEditor addEditor(String filepath) throws RepeatedException {
-        // 文件已经装入过，给出错误提示
-        if (editors.stream().anyMatch(editor -> editor.getFilepath().equals(filepath))) {
+    private void addEditor(String filepath) throws RepeatedException {
+        // FIXME: 文件已经装入过，给出错误提示
+        if (editorList.stream().anyMatch(editor -> editor.getFilepath().equals(filepath))) {
             throw new RepeatedException("filepath", filepath, "editor");
         }
-//        if (this.editorMap.containsKey(filepath)) {
-//            throw new RepeatedException("filepath", filepath, "editor");
-//        }
-
         // 新建 editor，并加入 list
         HtmlEditor editor = new HtmlEditor(filepath);
-        this.editors.add(editor);
-        // this.editorMap.put(filepath, editor);
-
+        this.editorList.add(editor);
         // 自动切换为 activeEditor
         this.activeEditor = editor;
-
-        return editor;
     }
 
     public void start() {
@@ -148,6 +134,13 @@ public class Session {
                     }
                 }
                 // 显示类命令
+                case "editor-list" -> {
+                    if (parts.length == 1) {
+                        command = new EditorListCommand(this.editorList, this.activeEditor);
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
+                }
                 case "print-indent" -> {
                     if (parts.length == 1) {
                         command = new PrintIndentCommand(document, 2); // 默认缩进2空格
@@ -231,6 +224,11 @@ public class Session {
             }
             */
                 default -> throw new NotExistsException("command", commandType);
+            }
+
+            // 记录当前 editor 是否被修改过
+            if (command.getCommandType().equals(Command.CommandType.EDIT)) {
+                this.activeEditor.setIsSaved(false);
             }
 
         } catch (Exception e) {
