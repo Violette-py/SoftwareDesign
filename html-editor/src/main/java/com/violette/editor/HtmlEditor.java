@@ -12,9 +12,13 @@ import lombok.Data;
 public class HtmlEditor {
     private HtmlDocument document;
     private CommandExecutor commandExecutor;
+    //    private boolean showId;
+    private boolean isSaved;
 
     public HtmlEditor() {
         this.document = new HtmlDocument();
         this.commandExecutor = new CommandExecutor();
+//        this.showId = true;
+        this.isSaved = true;
     }
 }
