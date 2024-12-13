@@ -2,16 +2,10 @@ package com.violette.editor;
 
 import com.violette.exception.NotExistsException;
 import com.violette.exception.RepeatedException;
-import com.violette.utils.HtmlConverter;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Node;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -92,20 +86,7 @@ public class Session {
      * 保存activeEditor的内容，写入文件
      * */
     public void save() {
-        // 写入文件
-        // 创建Jsoup文档对象
-        Document jsoupDoc = new Document("");
-        Node rootElement = HtmlConverter.convertCustomModelToJsoupModel(activeEditor.getDocument());
-        jsoupDoc.appendChild(rootElement); // 将根元素添加到文档中
-        // 将Jsoup文档对象保存为HTML文件
-        String filePath = activeEditor.getFilepath();
-        try (FileWriter writer = new FileWriter(filePath, StandardCharsets.UTF_8)) {
-            writer.write(jsoupDoc.toString());
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save HTML document to file: " + filePath, e);
-        }
-        // 设置保存状态
-        activeEditor.setIsSaved(true);
+        activeEditor.save();
     }
 
     /*
@@ -127,13 +108,7 @@ public class Session {
         }
         // 当前 editor 修改过
         if (!activeEditor.getIsSaved()) {
-            // 询问用户是否需要保存
-            System.out.println("当前文件内容暂未保存，是否需要保存？[y/n]");
-            Scanner scanner = new Scanner(System.in);
-            String line = scanner.nextLine().trim().toLowerCase();
-            if (line.equals("y") || line.equals("yes")) {
-                save();
-            }
+            askIfSaveTargetEditor(activeEditor);
         }
         // 将当前 editor 移除
         editorList.remove(activeEditor);
@@ -143,6 +118,16 @@ public class Session {
         } else {
             // 打开的编辑器列表中第一个
             activeEditor = editorList.get(0);
+        }
+    }
+
+    private void askIfSaveTargetEditor(HtmlEditor editor) {
+        // 询问用户是否需要保存
+        System.out.printf("Editor [%s] 中的文件内容暂未保存，是否需要保存？[y/n]%n", editor.getFilepath());
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine().trim().toLowerCase();
+        if (line.equals("y") || line.equals("yes")) {
+            editor.save();
         }
     }
 
