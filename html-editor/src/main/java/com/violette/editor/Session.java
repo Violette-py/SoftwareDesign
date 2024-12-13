@@ -2,9 +2,12 @@ package com.violette.editor;
 
 import com.violette.exception.NotExistsException;
 import com.violette.exception.RepeatedException;
+import com.violette.utils.HtmlConverter;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.*;
 import java.util.*;
@@ -29,17 +32,33 @@ public class Session {
      * 将文件载入新的editor
      * */
     @SneakyThrows
-    public HtmlEditor addEditor(String filepath) {
+    public HtmlEditor addEditor(String filePath) {
         // 文件已经装入过，给出错误提示
-        if (editorList.stream().anyMatch(editor -> editor.getFilepath().equals(filepath))) {
-            throw new RepeatedException("filepath", filepath, "editor");
+        if (editorList.stream().anyMatch(editor -> editor.getFilepath().equals(filePath))) {
+            throw new RepeatedException("filepath", filePath, "editor");
         }
 
         // 新建 editor，并加入 list
-        HtmlEditor editor = new HtmlEditor(filepath);
+        HtmlEditor editor = new HtmlEditor(filePath);
         this.editorList.add(editor);
         // 自动切换为 activeEditor
         this.activeEditor = editor;
+
+        File file = new File(filePath);
+        if (file.exists()) {
+            // 文件存在，直接读入
+            try {
+                // 使用Jsoup读取和解析HTML文件
+                Document jsoupDoc = Jsoup.parse(file, "UTF-8");
+                HtmlConverter.convertJsoupModelToCustomModel(jsoupDoc.child(0), activeEditor.getDocument()); // 从html元素开始
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to read HTML file: " + filePath, e);
+            }
+        } else {
+            // 文件不存在，新建文件并提供初始 html 模板
+            // 保存时再新建文件
+            activeEditor.getDocument().init();
+        }
 
         return editor;
     }
@@ -175,6 +194,7 @@ public class Session {
             for (EditorState state : states) {
                 HtmlEditor editor = addEditor(state.getFilePath());
                 editor.setShowId(state.getShowId());
+
             }
             // 读取 Active Editor 的 filePath
             String activeFilePath = (String) ois.readObject();

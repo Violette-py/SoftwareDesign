@@ -2,6 +2,7 @@ import com.violette.command.Command;
 import com.violette.command.impl.SpellCheckCommand;
 import com.violette.document.HtmlDocument;
 import com.violette.document.TextElement;
+import com.violette.utils.SpellChecker;
 import org.junit.Before;
 import org.junit.Test;
 import org.languagetool.JLanguageTool;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.*;
  */
 public class SpellCheckCommandTest {
     private HtmlDocument document;
+    private SpellChecker spellChecker;
     private JLanguageTool mockLangTool;
 
     @Before
@@ -31,12 +33,10 @@ public class SpellCheckCommandTest {
     public void testSpellCheckCommand() throws IOException {
         // 设置模拟对象，使其返回空的检查结果
         when(mockLangTool.check(anyString())).thenReturn(Collections.emptyList());
-        Command spellCheckCommand = new SpellCheckCommand(document) {
-            @Override
-            protected JLanguageTool getLangTool() {
-                return mockLangTool;
-            }
-        };
+        // 替换静态变量 langTool 为模拟对象
+        JLanguageTool oldLangTool = SpellChecker.getLangTool();
+        SpellChecker.langTool = mockLangTool;
+        Command spellCheckCommand = new SpellCheckCommand(document);
 
         // 添加文本元素到文档中
         String toCheckText = "A sentence with a spelling error.";
@@ -48,6 +48,9 @@ public class SpellCheckCommandTest {
 
         // 验证是否调用了LanguageTool的检查方法
         verify(mockLangTool).check(toCheckText);
+
+        // 恢复静态变量 langTool 的原始值
+        SpellChecker.langTool = oldLangTool;
     }
 
     @Test
@@ -58,12 +61,10 @@ public class SpellCheckCommandTest {
         when(ruleMatch.getToPos()).thenReturn(19);
         when(ruleMatch.getMessage()).thenReturn("Spelling mistake");
         when(mockLangTool.check(anyString())).thenReturn(Collections.emptyList());
-        Command spellCheckCommand = new SpellCheckCommand(document) {
-            @Override
-            protected JLanguageTool getLangTool() {
-                return mockLangTool;
-            }
-        };
+        // 替换静态变量 langTool 为模拟对象
+        JLanguageTool oldLangTool = SpellChecker.getLangTool();
+        SpellChecker.langTool = mockLangTool;
+        Command spellCheckCommand = new SpellCheckCommand(document);
 
         // 添加文本元素到文档中
         String toCheckText = "A sentence with a spelling error.";
@@ -75,5 +76,8 @@ public class SpellCheckCommandTest {
 
         // 验证是否调用了LanguageTool的检查方法
         verify(mockLangTool).check(toCheckText);
+
+        // 恢复静态变量 langTool 的原始值
+        SpellChecker.langTool = oldLangTool;
     }
 }

@@ -23,7 +23,7 @@ public class PrintTreeCommandTest {
 
         // 向 body 添加一些元素用于测试
         TagElement p1 = new TagElement("p", "p1");
-        TextElement text = new TextElement("Hello World");
+        TextElement text = new TextElement("hello World");
         p1.addChild(text);
         TagElement p2 = new TagElement("p", "p2");
         TagElement div = new TagElement("div", "div1");
@@ -51,7 +51,7 @@ public class PrintTreeCommandTest {
     }
 
     /*
-     * 测试打印树结构
+     * 测试打印树结构，包括spell-check标记
      * */
     @Test
     public void testPrintTree() {
@@ -64,7 +64,7 @@ public class PrintTreeCommandTest {
         expectedOutput.append("└── body\n");
         expectedOutput.append("    ├── div#div1\n");
         expectedOutput.append("    │   ├── p#p1\n");
-        expectedOutput.append("    │   │   └── Hello World\n");
+        expectedOutput.append("    │   │   └── [X] hello World\n");  // NOTE: 拼写错误，应为大写，所以开头有标记
         expectedOutput.append("    │   └── p#p2\n");
         expectedOutput.append("    └── span#span1\n");
         expectedOutput.append("        └── Span Text\n");

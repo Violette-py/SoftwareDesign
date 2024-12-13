@@ -1,6 +1,8 @@
 package com.violette.document;
 
+import com.violette.utils.SpellChecker;
 import lombok.Data;
+import morfologik.speller.Speller;
 
 /**
  * @author Violette
@@ -10,11 +12,12 @@ import lombok.Data;
 @Data
 public class TextElement extends HtmlElement {
     private String text;
+    private Boolean hasSpellingError;
 
     public TextElement(String text) {
         this.text = text;
+        this.hasSpellingError = false;
     }
-
 
     @Override
     public void printIndent(int indent, int prefix) {
@@ -24,6 +27,11 @@ public class TextElement extends HtmlElement {
     @Override
     public void printTree(TagElement parentElement, String prefix) {
         String connector = isLastChild(parentElement) ? "└── " : "├── ";
-        System.out.println(prefix + connector + text);
+        String spellCheckLabel = this.hasSpellingError ? "[X] " : "";
+        System.out.println(prefix + connector + spellCheckLabel + text);
+    }
+
+    public void hasSpellingMistake() {
+        this.hasSpellingError = true;
     }
 }

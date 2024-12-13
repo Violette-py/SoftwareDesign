@@ -2,15 +2,7 @@ package com.violette.command.impl;
 
 import com.violette.command.Command;
 import com.violette.document.HtmlDocument;
-import com.violette.document.HtmlElement;
-import com.violette.document.TagElement;
-import com.violette.document.TextElement;
-import org.languagetool.JLanguageTool;
-import org.languagetool.Languages;
-import org.languagetool.rules.RuleMatch;
-
-import java.io.IOException;
-import java.util.List;
+import com.violette.utils.SpellChecker;
 
 /**
  * @author Violette
@@ -18,7 +10,6 @@ import java.util.List;
  */
 public class SpellCheckCommand extends Command {
     private HtmlDocument document;
-    private JLanguageTool langTool;
 
     /**
      * SpellCheckCommand 的构造函数。
@@ -29,59 +20,12 @@ public class SpellCheckCommand extends Command {
         super(CommandType.DISPLAY);
 
         this.document = document;
-        // 使用LanguageTool支持的语言代码初始化LanguageTool对象，例如"en-US"表示美式英语
-        this.langTool = new JLanguageTool(Languages.getLanguageForShortCode("en"));
-    }
-
-    protected JLanguageTool getLangTool() {
-        // 便于在测试代码中模拟外部依赖
-        return this.langTool;
     }
 
     @Override
     public void execute() {
-        // 遍历HTML文档中的所有文本元素
-        traverseAndCheckText(document);
-    }
-
-    /**
-     * 遍历HTML文档并检查所有文本元素的拼写。
-     *
-     * @param element 当前遍历到的HTML元素。
-     */
-    private void traverseAndCheckText(HtmlElement element) {
-        if (element instanceof TextElement) {
-            // 检查TextElement的文本内容
-            System.out.println("now checking: " + ((TextElement) element).getText());
-            checkText(((TextElement) element).getText());
-        } else if (element instanceof TagElement) {
-            // 递归遍历TagElement的子元素
-            for (HtmlElement child : ((TagElement) element).getChildren()) {
-                traverseAndCheckText(child);
-            }
-        }
-    }
-
-    /**
-     * 使用LanguageTool检查文本内容的拼写。
-     *
-     * @param text 要检查的文本。
-     */
-    private void checkText(String text) {
-        List<RuleMatch> matches = null;
-        try {
-            matches = getLangTool().check(text);  // 便于在测试代码中模拟外部依赖
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        for (RuleMatch match : matches) {
-            // 输出拼写检查结果
-            System.out.println("Potential error at characters " +
-                    match.getFromPos() + "-" + match.getToPos() + ": " +
-                    match.getMessage());
-            System.out.println("Suggested correction(s): " +
-                    match.getSuggestedReplacements());
-        }
+        // 遍历HTML文档中的所有文本元素，并检查拼写错误
+        SpellChecker.traverseAndCheckText(document);
     }
 
     @Override
