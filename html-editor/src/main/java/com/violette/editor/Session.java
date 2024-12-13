@@ -30,8 +30,8 @@ public class Session {
     }
 
     /*
-    * 将文件载入新的editor
-    * */
+     * 将文件载入新的editor
+     * */
     @SneakyThrows
     public HtmlEditor addEditor(String filepath) {
         // 文件已经装入过，给出错误提示
@@ -49,8 +49,8 @@ public class Session {
     }
 
     /*
-    * 切换当前editor
-    * */
+     * 切换当前editor
+     * */
     public void switchActiveEditor(String filepath) throws NotExistsException {
         // 文件未装入editor
         if (this.editorList.stream().noneMatch(editor -> editor.getFilepath().equals(filepath))) {
@@ -63,12 +63,12 @@ public class Session {
     }
 
     /*
-    * 显示editor列表
-    * */
+     * 显示editor列表
+     * */
     public void showEditorList() throws NotExistsException {
-        // 当前没有活跃editor
-        if (this.activeEditor == null) {
-            throw new NotExistsException("activeEditor");
+        // 当前没有editor
+        if (this.editorList.isEmpty() || this.activeEditor == null) {
+            throw new NotExistsException("editor");
         }
         // 找到活跃editor
         int activeIndex = editorList.indexOf(this.activeEditor);
@@ -89,8 +89,8 @@ public class Session {
     }
 
     /*
-    * 保存activeEditor的内容，写入文件
-    * */
+     * 保存activeEditor的内容，写入文件
+     * */
     public void save() {
         // 写入文件
         // 创建Jsoup文档对象
@@ -109,10 +109,41 @@ public class Session {
     }
 
     /*
-    * 设置当前editor被修改过
-    * */
+     * 设置当前editor被修改过
+     * */
     public void setCurrEditorUnsaved() {
         this.activeEditor.setIsSaved(false);
+    }
+
+    /*
+     * 关闭 Active Editor
+     * 如果 Active Editor 中的文件修改过，则询问是否需要保存
+     * 关闭后 Active Editor 变为打开的编辑器列表中第一个；如果 Session 中没有其他的 Editor，则没有Active Editor。
+     * */
+    @SneakyThrows
+    public void closeCurrEditor() {
+        if (activeEditor == null) {
+            throw new NotExistsException("activeEditor");
+        }
+        // 当前 editor 修改过
+        if (!activeEditor.getIsSaved()) {
+            // 询问用户是否需要保存
+            System.out.println("当前文件内容暂未保存，是否需要保存？[y/n]");
+            Scanner scanner = new Scanner(System.in);
+            String line = scanner.nextLine().trim().toLowerCase();
+            if (line.equals("y") || line.equals("yes")) {
+                save();
+            }
+        }
+        // 将当前 editor 移除
+        editorList.remove(activeEditor);
+        // 设置 activeEditor
+        if (editorList.isEmpty()) {
+            activeEditor = null;
+        } else {
+            // 打开的编辑器列表中第一个
+            activeEditor = editorList.get(0);
+        }
     }
 
 }

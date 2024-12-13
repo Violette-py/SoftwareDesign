@@ -34,7 +34,8 @@ public class ConsoleClient {
             // 解析命令
             Command parsedCommand = this.parseCommand(line);
             if (isFirstCommand && !(parsedCommand instanceof LoadCommand)) {
-                throw new RuntimeException("First Command must be [load]");
+                System.out.println("First Command must be [load]");
+                continue;
             }
             isFirstCommand = false;
 
@@ -67,6 +68,11 @@ public class ConsoleClient {
         String[] params;
 
         try {
+            // 当前activeEditor = null, 且非 load命令
+            if (activeEditor == null && !commandType.equals("load")) {
+                throw new NotExistsException("editor");
+            }
+
             switch (commandType) {
                 // 编辑类命令
                 case "insert" -> {
@@ -177,39 +183,20 @@ public class ConsoleClient {
                         throw new NotExistsException("command", line);
                     }
                 }
-                case "edit" -> {
+                case "edit" -> { // 切换 activeEditor
                     if (parts.length == 2) {
-                        // 切换 activeEditor
                         command = new EditCommand(this.session, parts[1]);
                     } else {
                         throw new NotExistsException("command", line);
                     }
                 }
-            /*
-            case "read" -> {
-                if (parts.length == 2) {
-                    // 初始化一个新的文档，在CommandExecutor中会清空对前一个文档的操作记录
-                    this.document = new HtmlDocument();
-                    command = new ReadCommand(document, parts[1]);
-                } else {
-                    throw new NotExistsException("command", line);
+                case "close" -> {
+                    if (parts.length == 1) {
+                        command = new CloseCommand(this.session);
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
                 }
-            }
-            case "save" -> {
-                if (parts.length == 2) {
-                    command = new SaveCommand(document, parts[1]);
-                } else {
-                    throw new NotExistsException("command", line);
-                }
-            }
-            case "init" -> {
-                if (parts.length == 1) {
-                    command = new InitCommand(document);
-                } else {
-                    throw new NotExistsException("command", line);
-                }
-            }
-            */
                 default -> throw new NotExistsException("command", commandType);
             }
 

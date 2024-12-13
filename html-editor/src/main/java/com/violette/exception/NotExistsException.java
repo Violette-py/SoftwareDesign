@@ -6,7 +6,7 @@ package com.violette.exception;
  */
 public class NotExistsException extends Exception {
     public NotExistsException(String className) {
-        super(String.format("不存在 %s", className));
+        super(String.format("不存在%s", className));
     }
 
     public NotExistsException(String className, String value) {
