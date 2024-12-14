@@ -1,9 +1,11 @@
-package com.violette.editor;
+package com.violette.client;
 
 import com.violette.command.Command;
 import com.violette.command.CommandExecutor;
 import com.violette.command.impl.*;
 import com.violette.document.HtmlDocument;
+import com.violette.editor.HtmlEditor;
+import com.violette.editor.Session;
 import com.violette.exception.NotExistsException;
 
 import java.util.Scanner;
@@ -23,22 +25,25 @@ public class ConsoleClient {
     public void start() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("This is a HTML editor, code whatever you want here.");
-        boolean isFirstCommand = true;
 
         while (true) {
-            System.out.println("Enter command:");
             // 读取用户输入
+            System.out.println("Enter command:");
             String line = scanner.nextLine().trim();
             // 解析命令
             Command parsedCommand = this.parseCommand(line);
-            if (isFirstCommand && !(parsedCommand instanceof LoadCommand || parsedCommand instanceof EditorListCommand)) {
-                System.out.println("First Command must be [load] or [editor-list]");
+            if (parsedCommand == null) {
+                System.out.println("未成功解析命令。");
                 continue;
             }
-            isFirstCommand = false;
-
             // 委托给 executor执行 -- 为了实现 undo和 redo功能
-            if (parsedCommand != null) {
+            if (this.session.getActiveEditor() == null) {
+                if (parsedCommand instanceof LoadCommand) {
+                    parsedCommand.execute(); // 第一条系统命令直接执行
+                } else {
+                    System.out.println("当前没有活跃的编辑器，暂时无法执行命令。请先使用 [load] 命令加载文件。");
+                }
+            } else {
                 this.session.getActiveEditor().getCommandExecutor().executeCommand(parsedCommand);
             }
         }
@@ -66,11 +71,6 @@ public class ConsoleClient {
         String[] params;
 
         try {
-            // 当前activeEditor = null, 且非 load命令或editor-list命令
-            if (activeEditor == null && !(commandType.equals("load") || commandType.equals("editor-list"))) {
-                throw new NotExistsException("editor");
-            }
-
             switch (commandType) {
                 // 编辑类命令
                 case "insert" -> {
@@ -138,6 +138,22 @@ public class ConsoleClient {
                 case "print-tree" -> {
                     if (parts.length == 1) {
                         command = new PrintTreeCommand(document);
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
+                }
+                case "dir-indent" -> {
+                    if (parts.length == 1) {
+                        command = new DirIndentCommand(this.session, 2); // 默认缩进2空格
+                    } else if (parts.length == 2) {
+                        command = new DirIndentCommand(this.session, Integer.parseInt(parts[1]));
+                    } else {
+                        throw new NotExistsException("command", line);
+                    }
+                }
+                case "dir-tree" -> {
+                    if (parts.length == 1) {
+                        command = new DirTreeCommand(this.session);
                     } else {
                         throw new NotExistsException("command", line);
                     }

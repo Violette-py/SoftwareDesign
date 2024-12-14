@@ -2,6 +2,7 @@ package com.violette.editor;
 
 import com.violette.exception.NotExistsException;
 import com.violette.exception.RepeatedException;
+import com.violette.file.ProjectDirectory;
 import com.violette.utils.HtmlConverter;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -56,8 +57,8 @@ public class Session {
             }
         } else {
             // 文件不存在，新建文件并提供初始 html 模板
-            // 保存时再新建文件
             activeEditor.getDocument().init();
+            activeEditor.save();
         }
 
         return editor;
@@ -211,6 +212,44 @@ public class Session {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    /*
+     * 缩进打印文件系统
+     * */
+    public void dirIndent(int indent) {
+        ProjectDirectory root = constructFileSystem();
+        root.printIndent(indent, 0);
+    }
+
+    /*
+     * 树形打印文件系统
+     * */
+    public void dirTree() {
+        ProjectDirectory root = constructFileSystem();
+        root.printTree(null, "");
+    }
+
+    /*
+     * 构建文档树结构
+     * */
+    @SneakyThrows
+    private ProjectDirectory constructFileSystem() {
+        // 寻找当前未保存的文件
+        Set<String> unSavedFilePaths = new HashSet<>();
+        for (HtmlEditor editor : editorList) {
+            if (!editor.getIsSaved()) {
+                File file = new File(editor.getFilepath());
+                unSavedFilePaths.add(file.getCanonicalPath());
+//                unSavedFilePaths.add(editor.getFilepath());
+            }
+        }
+        // 构建文档树结构
+        File rootFile = new File(System.getProperty("user.dir"));
+        ProjectDirectory rootNode = new ProjectDirectory(unSavedFilePaths);
+        rootNode.buildTree(rootFile, rootNode);
+
+        return rootNode;
     }
 
     private void askIfSaveTargetEditor(HtmlEditor editor) {
