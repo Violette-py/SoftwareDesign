@@ -27,24 +27,27 @@ public class ConsoleClient {
         System.out.println("This is a HTML editor, code whatever you want here.");
 
         while (true) {
-            // 读取用户输入
-            System.out.println("Enter command:");
-            String line = scanner.nextLine().trim();
-            // 解析命令
-            Command parsedCommand = this.parseCommand(line);
-            if (parsedCommand == null) {
-                System.out.println("未成功解析命令。");
-                continue;
-            }
-            // 委托给 executor执行 -- 为了实现 undo和 redo功能
-            if (this.session.getActiveEditor() == null) {
-                if (parsedCommand instanceof LoadCommand) {
+            try {
+                // 读取用户输入
+                System.out.println("Enter command:");
+                String line = scanner.nextLine().trim();
+                // 解析命令
+                Command parsedCommand = this.parseCommand(line);
+                if (parsedCommand == null) {
+                    throw new NotExistsException("command");
+                }
+                // 委托给 executor执行 -- 为了实现 undo和 redo功能
+                if (this.session.getActiveEditor() == null) {
+                    if (!(parsedCommand instanceof LoadCommand)) {
+                        throw new NotExistsException("active editor");
+                    }
                     parsedCommand.execute(); // 第一条系统命令直接执行
                 } else {
-                    System.out.println("当前没有活跃的编辑器，暂时无法执行命令。请先使用 [load] 命令加载文件。");
+                    this.session.getActiveEditor().getCommandExecutor().executeCommand(parsedCommand);
                 }
-            } else {
-                this.session.getActiveEditor().getCommandExecutor().executeCommand(parsedCommand);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
 
